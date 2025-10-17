@@ -1,5 +1,5 @@
 <template>
-  Hello
+  Empty
 </template>
 
 <script lang="ts" setup></script>
