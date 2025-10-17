@@ -30,7 +30,7 @@
 
 <script lang="ts" setup>
 import { ref, defineEmits } from 'vue';
-import { useAuthStore } from '../storage/general';
+import { useAuthStore } from '../storage/auth';
 import { loginUser } from '../api/user';
 
 const authStore = useAuthStore();
@@ -71,7 +71,7 @@ const login = () => {
 		if (res.status === 200) {
 			loadingText.value = 'Setting up credentials...';
 			authStore.token = res.data.access_token;
-			authStore.username = username.value;
+			authStore.setLogin(username.value);
 			emit('close');
 		}
 	}).catch((err) => {

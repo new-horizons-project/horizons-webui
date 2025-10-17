@@ -5,7 +5,7 @@
 				<img height="55" :src="src">
 
 				<div class="text-block">
-					<h2><slot>{{ header }}</slot></h2>
+					<h3><slot>{{ header }}</slot></h3>
 					<p><slot>{{ message }}</slot></p>
 				</div>
 			</div>
@@ -70,7 +70,7 @@ const typeClass = computed(() => {
 	gap: 10px;
 }
 
-h2, p {
+h3, p {
 	padding: 0;
 	margin: 0;
 }

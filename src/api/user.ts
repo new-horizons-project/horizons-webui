@@ -1,7 +1,7 @@
-import api from "./axios";
+import { api, refresh } from "./axios";
 
 export async function loadUser() {
-	const res = await api.get('/user');
+	const res = await api.get('/user/');
 	return res.data;
 }
 
@@ -19,5 +19,17 @@ export async function loginUser(username: string, password: string) {
 			},
 		},
 	);
+
+	console.log(res);
+
 	return res;
+}
+
+export async function reloadToken() {
+	const res = await refresh.post("/auth/renew_access", {}, { withCredentials: true });
+	return res;
+}
+
+export async function logout() {
+	await api.post('/auth/logout');
 }

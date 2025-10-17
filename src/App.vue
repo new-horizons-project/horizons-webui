@@ -1,16 +1,37 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useAuthStore } from './storage/general';
+import { useAuthStore } from './storage/auth';
+import { useUiStore } from './storage/ui';
+import { reloadToken, loadUser } from './api/user';
 import Login from './components/Login.vue';
+import Loading from './components/Loading.vue';
 import Notification from './components/Notification.vue';
 
 const authStore = useAuthStore();
+const uiStore = useUiStore();
 
-const showLogin = ref(!authStore.isLoggedIn());
+if (!authStore.isLoggedIn) {
+	reloadToken().then(res => {
+		if (res.status === 200) {
+			authStore.token = res.data.access_token;
+			return loadUser();
+		}
+	}).then((user) => {
+		authStore.setLogin(user.username);
+	}).catch((err) => {
+		if (err.status === 401) {
+			uiStore.showLoginForm()
+			return;
+		}
+		// Display critical error
+		console.log(err);
+	});
+}
+
 const showNotification = ref(false);
 
 const closeLogin = () => {
-	showLogin.value = false;
+	uiStore.hideLoginForm();
 	showNotification.value = true;
 };
 
@@ -21,7 +42,7 @@ const closeNotification = () => {
 </script>
 
 <template>
-	<div v-if="showLogin">
+	<div v-if="uiStore.displayLoginForm">
 		<Login @close="closeLogin" />
 	</div>
 	<div v-if="showNotification">
@@ -29,8 +50,10 @@ const closeNotification = () => {
 			message="You have successfully logged in." type="success" @close="closeNotification"/>
 	</div>
 
-	<router-view />
+	<router-view v-if="authStore.isLoggedIn"/>
+	<Loading v-else-if="!uiStore.showLoadingBlocked"/>
 </template>
 
 <style scoped>
+
 </style>
