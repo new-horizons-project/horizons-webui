@@ -45,3 +45,4 @@ Special thanks to the authors and maintainers of these libraries for their contr
 | Role                     | Contributor |
 |--------------------------|-------------|
 | Lead Fullstack Developer | [@at-elcapitan](https://github.com/at-elcapitan) |
+| UI/UX Designer           | [@at-elcapitan](https://github.com/at-elcapitan) |
