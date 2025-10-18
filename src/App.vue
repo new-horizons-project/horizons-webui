@@ -72,7 +72,3 @@ const closeNotification = () => {
 }
 
 </script>
-
-<style scoped>
-
-</style>
