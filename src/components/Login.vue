@@ -1,6 +1,6 @@
 <template>
-  <div class="subblur">
-	<div class="form-background-block">
+	<Modal ref="modalRef" :width=55 :height=450 measure-width="%" measure-height="px"
+	padding-set="35px" opacity-speed="0.2s" :max-width="700">
 		<img src="http://127.0.0.1:8000/static/1?size=small" width="150" alt="">
 
 		<div class="loading-screen" v-if="loadingScreen">
@@ -24,11 +24,11 @@
 
 			<button @click="login">Login</button>
 		</div>
-	</div>
-  </div>
+	</Modal>
 </template>
 
 <script lang="ts" setup>
+import Modal from './Modal.vue';
 import { ref, defineEmits } from 'vue';
 import { useAuthStore } from '../storage/auth';
 import { loginUser } from '../api/user';
@@ -48,71 +48,58 @@ const passwordInput = ref<HTMLInputElement | null>(null);
 
 const emit = defineEmits(['close']);
 
-const login = () => {
-	let err = false;
+const modalRef = ref<InstanceType<typeof Modal> | null>(null);
 
-	if (username.value === '') {
-		err = true;
-		usernameErr.value = true;
-	}
+const login = async () => {
+    let err = false;
 
-	if (password.value === '') {
-		err = true;
-		passwordErr.value = true;
-	}
+    if (username.value === '') {
+        err = true;
+        usernameErr.value = true;
+    }
 
-	if (err) {
-		return;
-	}
+    if (password.value === '') {
+        err = true;
+        passwordErr.value = true;
+    }
 
-	loadingScreen.value = true;
+    if (err) return;
 
-	loginUser(username.value, password.value).then((res) => {
-		if (res.status === 200) {
-			loadingText.value = 'Setting up credentials...';
-			authStore.token = res.data.access_token;
-			authStore.setLogin(username.value);
-			emit('close');
-		}
-	}).catch((err) => {
-		if (err.status === 400 || err.status === 401 || err.status === 404) {
-			loadingScreen.value = false;
-			passwordErr.value = true;
-			usernameErr.value = true;
-		} else if (err.status === 403) {
-			loadingText.value = 'You must change your password on first login.';
-			userMustChangePassword.value = true;
-		} else {
-			loadingText.value = 'An error occurred. Please try again later.';
-			console.error(err);
-		}
-	});
+    loadingScreen.value = true;
+
+    try {
+        const res = await loginUser(username.value, password.value);
+
+        if (res.status === 200) {
+            loadingText.value = 'Setting up credentials...';
+            authStore.token = res.data.access_token;
+            authStore.setLogin(username.value);
+
+            await modalRef.value?.closeModal();
+
+            emit('close');
+        }
+    } catch (err: any) {
+        if (err.status === 400 || err.status === 401 || err.status === 404) {
+            loadingScreen.value = false;
+            passwordErr.value = true;
+            usernameErr.value = true;
+            return;
+        }
+
+        if (err.status === 403) {
+            loadingText.value = 'You must change your password on first login.';
+            userMustChangePassword.value = true;
+            return;
+        }
+
+        loadingText.value = 'An error occurred. Try reloading page.';
+        console.error(err);
+    }
 };
-
 </script>
 
 <style scoped>
-.form-background-block {
-	background-color: rgba(35, 35, 35, 0.5);
-	border: 1px solid rgba(255, 255, 255, 0.105);
-	box-shadow: 0 1px 10px rgba(135, 135, 135, 0.1);
-	border-radius: 5px;
-	padding: 35px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	width: 50%;
-	max-width: 600px;
-	height: max-content;
-	min-height: 400px;
-	gap: 20px;
-	opacity: 0;
-	transform: translateY(30px);
-	animation: appear 0.6s ease forwards;
-	transition: height 0.3s, min-height 0.3s;
-}
-
 .login-form {
 	width: 100%;
 	display: flex;
@@ -125,7 +112,7 @@ const login = () => {
 	inset: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 50px;
+	gap: 100px;
 	justify-content: center;
 	align-items: center;
 	color: white;
@@ -178,9 +165,6 @@ const login = () => {
 .text {
 	font-size: 28px;
 	font-weight: 600;
-	opacity: 0;
-	transform: translateY(10px);
-	animation: fadeInUp 0.7s ease forwards 0.5s;
 }
 
 .input-block {
@@ -252,13 +236,6 @@ button:active {
 }
 
 @keyframes appear {
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes fadeInUp {
 	to {
 		opacity: 1;
 		transform: translateY(0);

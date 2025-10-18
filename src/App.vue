@@ -10,23 +10,42 @@ import Notification from './components/Notification.vue';
 const authStore = useAuthStore();
 const uiStore = useUiStore();
 
-if (!authStore.isLoggedIn) {
-	reloadToken().then(res => {
-		if (res.status === 200) {
-			authStore.token = res.data.access_token;
-			return loadUser();
+const reconnectMessageSubstr = ref<string>("");
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+async function loginAttempt() {
+	for (let i = 0; i < 5; i++) {
+		reconnectMessageSubstr.value = `Attempt: ${i + 1} of 5`;
+		console.log(`Attempt ${i + 1}`);
+
+		try {
+			const res = await reloadToken();
+			if (res.status === 200) {
+				authStore.token = res.data.access_token;
+				const user = await loadUser();
+				authStore.setLogin(user.username);
+				break;
+			}
+		} catch (err: any) {
+			if (err.status === 401) {
+				uiStore.showLoginForm();
+				break;
+			}
+
+			console.log(err);
+			await sleep(5000);
 		}
-	}).then((user) => {
-		authStore.setLogin(user.username);
-	}).catch((err) => {
-		if (err.status === 401) {
-			uiStore.showLoginForm()
-			return;
-		}
-		// Display critical error
-		console.log(err);
-	});
+	}
+
+	reconnectMessageSubstr.value = "Reload the page to retry connection";
 }
+
+if (!authStore.isLoggedIn) {
+	(async () => {
+		await loginAttempt();
+	})();
+}
+
 
 const showNotification = ref(false);
 
@@ -51,7 +70,7 @@ const closeNotification = () => {
 	</div>
 
 	<router-view v-if="authStore.isLoggedIn"/>
-	<Loading v-else-if="!uiStore.showLoadingBlocked"/>
+	<Loading v-else-if="!uiStore.showLoadingBlocked" :substr="reconnectMessageSubstr" />
 </template>
 
 <style scoped>

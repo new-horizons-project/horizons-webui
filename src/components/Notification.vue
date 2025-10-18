@@ -5,8 +5,8 @@
 				<img height="55" :src="src">
 
 				<div class="text-block">
-					<h3><slot>{{ header }}</slot></h3>
-					<p><slot>{{ message }}</slot></p>
+					<h3>{{ header }}</h3>
+					<p>{{ message }}</p>
 				</div>
 			</div>
 		</div>
@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineEmits } from 'vue';
+import { computed } from 'vue';
 
 const emit = defineEmits(['close']);
 
