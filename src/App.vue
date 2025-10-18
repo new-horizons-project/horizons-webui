@@ -8,7 +8,7 @@
 	</div>
 
 	<router-view v-if="authStore.isLoggedIn"/>
-	<Loading v-else-if="!uiStore.showLoadingBlocked" :substr="reconnectMessageSubstr" />
+	<Loading v-else-if="!uiStore.showLoadingBlocked" :message="t('loading.connection.messages.header')" :substr="reconnectMessageSubstr" />
 </template>
 
 <script setup lang="ts">
@@ -19,16 +19,20 @@ import { reloadToken, loadUser } from './api/user';
 import Login from './components/Login.vue';
 import Loading from './components/Loading.vue';
 import Notification from './components/Notification.vue';
+import { useI18n } from 'vue-i18n';
 
 const authStore = useAuthStore();
 const uiStore = useUiStore();
+const { t } = useI18n();
 
 const reconnectMessageSubstr = ref<string>("");
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function loginAttempt() {
 	for (let i = 0; i < 5; i++) {
-		reconnectMessageSubstr.value = `Attempt: ${i + 1} of 5`;
+		reconnectMessageSubstr.value = t('loading.connection.messages.substring.1', {
+			attempt: i + 1, attempts: 5
+		});
 		console.log(`Attempt ${i + 1}`);
 
 		try {
@@ -50,7 +54,7 @@ async function loginAttempt() {
 		}
 	}
 
-	reconnectMessageSubstr.value = "Reload the page to retry connection";
+	reconnectMessageSubstr.value = t('loading.connection.messages.substring.2');
 }
 
 if (!authStore.isLoggedIn) {

@@ -17,12 +17,12 @@
 
 			<div class="input-block" v-if="!userMustChangePassword">
 				<input type="text" :class="{ error: usernameErr }" @focus="usernameErr = false"
-					ref="usernameInput" v-model="username" placeholder="Username" />
+					ref="usernameInput" v-model="username" :placeholder="t('modal.login.inputs.username')" />
 				<input type="password" :class="{ error: passwordErr }" @focus="passwordErr = false"
-					ref="passwordInput" v-model="password" placeholder="Password" />
+					ref="passwordInput" v-model="password" :placeholder="t('modal.login.inputs.password')" />
 			</div>
 
-			<button @click="login">Login</button>
+			<button @click="login">{{ t('modal.login.buttons.login') }}</button>
 		</div>
 	</Modal>
 </template>
@@ -32,8 +32,10 @@ import Modal from './Modal.vue';
 import { ref } from 'vue';
 import { useAuthStore } from '../storage/auth';
 import { loginUser } from '../api/user';
+import { useI18n } from 'vue-i18n';
 
 const authStore = useAuthStore();
+const { t } = useI18n();
 
 const loadingScreen = ref(false);
 const userMustChangePassword = ref(false);
