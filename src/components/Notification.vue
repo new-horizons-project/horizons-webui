@@ -34,71 +34,62 @@ const typeClass = computed(() => {
 
 </script>
 
-<style scoped>
-.notification {
-	cursor: pointer;
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.105);
-	background-color: rgba(35, 35, 35, 0.5);
-	box-shadow: 0 1px 10px rgba(135, 135, 135, 0.1);
-	padding: 10px;
-	border-radius: 5px;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	min-width: 300px;
-	max-width: 400px;
-	transition: transform 0.1s;
-	opacity: 0;
-	transform: translateX(10px);
-	animation: appear 0.6s ease forwards;
-}
+<style scoped lang="sass">
+.notification
+	cursor: pointer
+	position: absolute
+	top: 10px
+	right: 10px
+	border: 1px solid rgba(255, 255, 255, 0.105)
+	background-color: rgba(35, 35, 35, 0.5)
+	box-shadow: 0 1px 10px rgba(135, 135, 135, 0.1)
+	padding: 10px
+	border-radius: 5px
+	display: flex
+	flex-direction: column
+	gap: 10px
+	min-width: 300px
+	max-width: 400px
+	transition: transform 0.1s
+	opacity: 0
+	transform: translateX(10px)
+	animation: appear 0.6s ease forwards
 
-.notification:hover {
-	box-shadow: 0 2px 20px rgba(135, 135, 135, 0.1);
-	transform: scale(1.02);
-}
+	&:hover
+		box-shadow: 0 2px 20px rgba(135, 135, 135, 0.1)
+		transform: scale(1.02)
 
-.notification-block {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 10px;
-}
+.notification-block
+	display: flex
+	justify-content: center
+	align-items: center
+	gap: 10px
 
-h3, p {
-	padding: 0;
-	margin: 0;
-}
+h3, p
+	padding: 0
+	margin: 0
 
-button {
-	padding: 2px 12px;
-	background: transparent;
-	border: 2px solid rgba(255, 255, 255, 0.3);
-	border-radius: 5px;
-	color: white;
-	font-size: 16px;
-	cursor: pointer;
-	transition: border-color 0.2s, transform 0.15s, color 0.2s, background-color 0.2s;
-}
+button
+	padding: 2px 12px
+	background: transparent
+	border: 2px solid rgba(255, 255, 255, 0.3)
+	border-radius: 5px
+	color: white
+	font-size: 16px
+	cursor: pointer
+	transition: border-color 0.2s, transform 0.15s, color 0.2s, background-color 0.2s
 
-button:hover {
-	border-color: white;
-	background-color: rgba(255, 255, 255, 0.109);
-	transform: translateY(-2px);
-}
+	&:hover
+		border-color: white
+		background-color: rgba(255, 255, 255, 0.109)
+		transform: translateY(-2px)
 
-button:active {
-	transform: translateY(1px);
-	color: rgb(200, 200, 200);
-}
+	&:active
+		transform: translateY(1px)
+		color: rgb(200, 200, 200)
 
-@keyframes appear {
-	to {
-		opacity: 1;
-		transform: translateX(0);
-	}
-}
+@keyframes appear
+	to
+		opacity: 1
+		transform: translateX(0)
 </style>

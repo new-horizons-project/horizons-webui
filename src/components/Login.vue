@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import Modal from './Modal.vue';
-import { ref, defineEmits } from 'vue';
+import { ref } from 'vue';
 import { useAuthStore } from '../storage/auth';
 import { loginUser } from '../api/user';
 
@@ -99,174 +99,144 @@ const login = async () => {
 };
 </script>
 
-<style scoped>
-.login-form {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 10px;
-}
+<style lang="sass" scoped>
+.login-form
+	width: 100%
+	display: flex
+	flex-direction: column
+	align-items: center
+	gap: 10px
 
-.loading-screen {
-	inset: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 100px;
-	justify-content: center;
-	align-items: center;
-	color: white;
-	font-size: 18px;
-	margin-top: 50px;
-}
+.loading-screen
+	inset: 0
+	display: flex
+	flex-direction: column
+	gap: 100px
+	justify-content: center
+	align-items: center
+	color: white
+	font-size: 18px
+	margin-top: 50px
 
-.loading-circle {
-	width: 50px;
-	height: 50px;
-	border: 5px solid rgba(255, 255, 255, 0.3);
-	border-top-color: white;
-	border-radius: 50%;
-	animation: spin 1s linear infinite;
-}
+.loading-circle
+	width: 50px
+	height: 50px
+	border: 5px solid rgba(255, 255, 255, 0.3)
+	border-top-color: white
+	border-radius: 50%
+	animation: spin 1s linear infinite
 
-.loading-text {
-	font-size: 24px;
-	font-weight: 500;
-}
+.loading-text
+	font-size: 24px
+	font-weight: 500
 
-.subblur {
-	position: absolute;
-	inset: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: rgba(0, 0, 0, 0.4);
-	backdrop-filter: blur(5px);
-	z-index: 1000;
-}
+.subblur
+	position: absolute
+	inset: 0
+	display: flex
+	justify-content: center
+	align-items: center
+	background: rgba(0, 0, 0, 0.4)
+	backdrop-filter: blur(5px)
+	z-index: 1000
 
-.image-block {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 20px;
-	color: rgb(210, 210, 210);
-}
+.image-block
+	display: flex
+	flex-direction: column
+	align-items: center
+	gap: 20px
+	color: rgb(210, 210, 210)
 
-.image-block img {
-	width: 150px;
-	height: auto;
-	object-fit: contain;
-	opacity: 0;
-	transform: scale(0.95);
-	animation: imageAppear 0.8s ease forwards 0.2s;
-}
+		img:
+			width: 150px
+			height: auto
+			object-fit: contain
+			opacity: 0
+			transform: scale(0.95)
+			animation: imageAppear 0.8s ease forwards 0.2s
 
-.text {
-	font-size: 28px;
-	font-weight: 600;
-}
+.text
+	font-size: 28px
+	font-weight: 600
 
-.input-block {
-	width: 80%;
-	display: flex;
-	flex-direction: column;
-	gap: 25px;
-	margin-top: 10px;
-}
+.input-block
+	width: 80%
+	display: flex
+	flex-direction: column
+	gap: 25px
+	margin-top: 10px
 
-.error {
-	border-bottom-color: rgb(153, 52, 52) !important;
-	animation: shake 0.3s ease;
-}
+.error
+	border-bottom-color: rgb(153, 52, 52) !important
+	animation: shake 0.3s ease
 
-input {
-	background: transparent;
-	border: none;
-	border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-	padding: 10px;
-	font-size: 16px;
-	color: white;
-	outline: none;
-	transition: border-color 0.3s, transform 0.15s;
-}
+input
+	background: transparent
+	border: none
+	border-bottom: 2px solid rgba(255, 255, 255, 0.3)
+	padding: 10px
+	font-size: 16px
+	color: white
+	outline: none
+	transition: border-color 0.3s, transform 0.15s
 
-input:hover {
-	border-bottom-color: rgba(255, 255, 255, 0.5);
-}
+	&:hover
+		border-bottom-color: rgba(255, 255, 255, 0.5)
 
-input:focus {
-	border-bottom-color: white;
-	transform: scale(1.02);
-}
+	&:focus
+		border-bottom-color: white
+		transform: scale(1.02)
 
-input::placeholder {
-	color: rgba(255, 255, 255, 0.5);
-}
+	&::placeholder
+		color: rgba(255, 255, 255, 0.5)
 
-button {
-	margin-top: 30px;
-	padding: 8px 24px;
-	background: transparent;
-	border: 2px solid rgba(255, 255, 255, 0.3);
-	border-radius: 5px;
-	color: white;
-	font-size: 16px;
-	cursor: pointer;
-	transition: border-color 0.2s, transform 0.15s, color 0.2s, background-color 0.2s;
-}
+button
+	margin-top: 30px
+	padding: 8px 24px
+	background: transparent
+	border: 2px solid rgba(255, 255, 255, 0.3)
+	border-radius: 5px
+	color: white
+	font-size: 16px
+	cursor: pointer
+	transition: border-color 0.2s, transform 0.15s, color 0.2s, background-color 0.2s
 
-button:hover {
-	border-color: white;
-	background-color: rgba(255, 255, 255, 0.109);
-	transform: translateY(-2px);
-}
+	&:hover
+		border-color: white
+		background-color: rgba(255, 255, 255, 0.109)
+		transform: translateY(-2px)
 
-button:active {
-	transform: translateY(1px);
-	color: rgb(200, 200, 200);
-}
+	&:active
+		transform: translateY(1px)
+		color: rgb(200, 200, 200)
 
-@media (max-width: 1000px) {
-	.form-background-block {
-		width: 90%;
-		max-height: 555px;
-		height: 80%;
-	}
-}
+@media (max-width: 1000px)
+	.form-background-block
+		width: 90%
+		max-height: 555px
+		height: 80%
 
-@keyframes appear {
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
+@keyframes appear
+	to
+		opacity: 1
+		transform: translateY(0)
 
-@keyframes imageAppear {
-	to {
-		opacity: 1;
-		transform: scale(1);
-	}
-}
+@keyframes imageAppear
+	to
+		opacity: 1
+		transform: scale(1)
 
-@keyframes spin {
-	to {
-		transform: rotate(360deg);
-	}
-}
+@keyframes spin
+	to
+		transform: rotate(360deg)
 
-@keyframes shake {
-	0%, 100% {
-		transform: translateX(0);
-	}
-	25% {
-		transform: translateX(-5px);
-	}
-	50% {
-		transform: translateX(5px);
-	}
-	75% {
-		transform: translateX(-5px);
-	}
-}
+@keyframes shake
+	0%, 100%
+		transform: translateX(0)
+	25%
+		transform: translateX(-5px)
+	50%
+		transform: translateX(5px)
+	75%
+		transform: translateX(-5px)
 </style>

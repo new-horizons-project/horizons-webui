@@ -1,3 +1,16 @@
+<template>
+	<div v-if="uiStore.displayLoginForm">
+		<Login @close="closeLogin" />
+	</div>
+	<div v-if="showNotification">
+		<Notification :header="`Welcome, ${ authStore.username }!`" src="http://127.0.0.1:8000/static/1?size=thumbnail"
+			message="You have successfully logged in." type="success" @close="closeNotification"/>
+	</div>
+
+	<router-view v-if="authStore.isLoggedIn"/>
+	<Loading v-else-if="!uiStore.showLoadingBlocked" :substr="reconnectMessageSubstr" />
+</template>
+
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from './storage/auth';
@@ -59,19 +72,6 @@ const closeNotification = () => {
 }
 
 </script>
-
-<template>
-	<div v-if="uiStore.displayLoginForm">
-		<Login @close="closeLogin" />
-	</div>
-	<div v-if="showNotification">
-		<Notification :header="`Welcome, ${ authStore.username }!`" src="http://127.0.0.1:8000/static/1?size=thumbnail"
-			message="You have successfully logged in." type="success" @close="closeNotification"/>
-	</div>
-
-	<router-view v-if="authStore.isLoggedIn"/>
-	<Loading v-else-if="!uiStore.showLoadingBlocked" :substr="reconnectMessageSubstr" />
-</template>
 
 <style scoped>
 

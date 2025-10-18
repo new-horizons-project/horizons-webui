@@ -76,50 +76,45 @@ defineExpose({ closeModal });
 
 </script>
 
-<style scoped>
-.subblur {
-	position: absolute;
-	top: 0;
-	inset: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: rgba(0, 0, 0, 0.4);
-	backdrop-filter: blur(5px);
-	z-index: 1000;
-}
+<style scoped lang="sass">
+.subblur
+	position: absolute
+	top: 0
+	inset: 0
+	display: flex
+	justify-content: center
+	align-items: center
+	background: rgba(0, 0, 0, 0.4)
+	backdrop-filter: blur(5px)
+	z-index: 1000
 
-.modal-background-block {
-	background-color: rgba(35, 35, 35, 0.5);
-	border: 1px solid rgba(255, 255, 255, 0.105);
-	box-shadow: 0 1px 10px rgba(135, 135, 135, 0.1);
-	border-radius: 5px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 20px;
-	width: auto;
-	height: auto;
-	transition: width 0.3s, height 0.3s, padding 0.3s;
-}
+.modal-background-block
+	background-color: rgba(35, 35, 35, 0.5)
+	border: 1px solid rgba(255, 255, 255, 0.105)
+	box-shadow: 0 1px 10px rgba(135, 135, 135, 0.1)
+	border-radius: 5px
+	display: flex
+	flex-direction: column
+	align-items: center
+	justify-content: center
+	gap: 20px
+	width: auto
+	height: auto
+	transition: width 0.3s, height 0.3s, padding 0.3s
 
-.slot-wrapper {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	height: 100%;
-	gap: 20px;
-}
+.slot-wrapper
+	display: flex
+	flex-direction: column
+	align-items: center
+	justify-content: center
+	width: 100%
+	height: 100%
+	gap: 20px
 
-@media (max-width: 800px) {
-	.modal-background-block {
-		width: 90% !important;
-		height: 80% !important;
-		max-width: 90% !important;
-		max-height: 555px !important;
-	}
-}
+@media (max-width: 800px)
+	.modal-background-block
+		width: 90% !important
+		height: 80% !important
+		max-width: 90% !important
+		max-height: 555px !important
 </style>
