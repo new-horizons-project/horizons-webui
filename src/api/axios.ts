@@ -29,7 +29,7 @@ api.interceptors.response.use(
   (response) => response,
   async (err) => {
     const authStore = useAuthStore();
-
+    
     if (err.response?.status === 401 && !authStore.isLoggedIn) {
       try {
         const res = await refresh.post("/auth/renew_access", {}, { withCredentials: true });
