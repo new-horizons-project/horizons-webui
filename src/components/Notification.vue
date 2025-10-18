@@ -1,16 +1,14 @@
 <template>
-	<Transition name="fade">
-		<div :class="['notification', typeClass]" @click="emit('close')">
-			<div class="notification-block">
-				<img height="55" :src="src">
+	<div :class="['notification', typeClass]" @click="emit('close')">
+		<div class="notification-block">
+			<img height="55" :src="src">
 
-				<div class="text-block">
-					<h3>{{ header }}</h3>
-					<p>{{ message }}</p>
-				</div>
+			<div class="text-block">
+				<h3>{{ header }}</h3>
+				<p>{{ message }}</p>
 			</div>
 		</div>
-	</Transition>
+	</div>
 </template>
 
 <script lang="ts" setup>

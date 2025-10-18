@@ -5,7 +5,7 @@
 	</div>
 
     <div class="message" :class="{ showMessage }">
-      	Seems like we have a problem with connecting API<br>Contact administrator
+      	Seems like we have a problem with connecting to the API<br>Contact administrator
 		<div class="substring">
 			{{ substr }}
 		</div>
@@ -82,6 +82,13 @@ setTimeout(() => {
 @keyframes spin {
 	to {
 		transform: rotate(360deg);
+	}
+}
+
+@media (max-width: 717px) {
+	.message {
+		font-size: 20px;
+		font-weight: 600;
 	}
 }
 </style>
