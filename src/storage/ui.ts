@@ -3,17 +3,12 @@ import { ref } from "vue"
 
 export const useUiStore = defineStore('ui', () => {
 	const displayLoginForm = ref<boolean>(false);
-	const showLoadingBlocked = ref<boolean>(false);
+	const showLoading = ref<boolean>(false);
+	const apiConnecitonChecked = ref<boolean>(false);
 
-	function showLoginForm () {
-		displayLoginForm.value = true;
-		showLoadingBlocked.value = true;
+	return {
+		displayLoginForm, 
+		showLoading,
+		apiConnecitonChecked,
 	}
-
-	function hideLoginForm () {
-		displayLoginForm.value = false;
-		showLoadingBlocked.value = false;
-	}
-
-	return {displayLoginForm, showLoadingBlocked, showLoginForm, hideLoginForm}
 });
