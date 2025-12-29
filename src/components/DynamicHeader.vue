@@ -1,127 +1,55 @@
 <template>
-	<div 
-		class="wrapper"
-		@mouseenter="handleMouseStart"
-		@mouseleave="handleMouseEnd"
-		@mousedown="handleMouseDown"
-		@mouseup="handleMouseUp"
-	>
-		<div 
-			class="header" 
-
-		    :class="{ 
-				pinned: displayState() === State.Pinned,
-				compact: isCompact
-			}
-		">
-			<div v-if="!isCompact" class="logo">
+	<div class="wrapper">
+		<div class="header">
+			<div class="logo">
 				<img src="http://127.0.0.1:8000/static/1?size=thumbnail" alt="">
 			</div>
 
-			<div v-if="!isCompact" class="links">
+			<div class="links">
 				<a href="/" class="underline">Home</a>
-				<a href="/">Latest</a>
+				<a href="/">News</a>
+				<a href="/">Pinned 1</a>
+				<a href="/">Pinned 2</a>
+				<a href="/">Pinned 3</a>
+				<a href="/">Communities</a>
 				<a href="/">Search</a>
-				<a href="/">My</a>
 			</div>
 
-			<div v-if="!isCompact" class="user">
-				ElCapitan
-			</div>
+			<div class="buttons-block">
+				<div class="system-configuration">
+					<img src="/icons/gear.png" alt="">
+				</div>
 
-			<div v-else class="compact-data">
-				Information > Lorem ipsum
+				<div class="user">
+					<img src="/icons/avatar.jpg" alt="">
+
+					ElCapitan
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-
-const State = {
-  Island: 'Island',
-  Pinned: 'Pinned',
-} as const;
-
-type State_t = typeof State[keyof typeof State];
-
-const state = ref<State_t>(State.Island);
-const isCompact = ref(false);
-
-let holdTimeout: number | null = null;
-let compactHovered = false;
-let lastEventCompact = false;
-
-function handleMouseStart() {
-	if (isCompact.value) {
-		compactHovered = true;
-	}
-}
-
-function handleMouseEnd() {
-	if (compactHovered) {
-		compactHovered = false;
-	}
-}
-
-function handleMouseDown() {
-	holdTimeout = window.setTimeout(() => {
-		isCompact.value = !isCompact.value;
-		lastEventCompact = true;
-	}, 500);
-}
-
-function handleMouseUp() {
-	if (!holdTimeout) {
-		return;
-	}
-
-	if (lastEventCompact) {
-		lastEventCompact = false;
-		return;
-	}
-
-	clearTimeout(holdTimeout);
-	holdTimeout = null;
-
-	if (!isCompact.value) {
-		state.value = state.value === State.Island ? State.Pinned : State.Island;
-	}
-}
-
-const displayState = () => {
-  if (isCompact.value) {
-    return compactHovered ? State.Island : null;
-  }
-
-  return state.value;
-};
-
-</script>
-
 <style lang="scss" scoped>
 .wrapper {
 	width: 100%;
-	height: fit-content;
+	height: min-content;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
 .header {
-    position: relative;
     overflow: hidden;
+	padding: 5px;
     margin: 10px;
-    padding: 15px;
     font-size: 16px;
-    width: 60%;
+    width: 75%;
     display: flex;
-    align-items: center;
 	font-weight: 600;
-    gap: 10px;
+    gap: 25px;
     border-radius: 15px;
-	justify-content: center;
+	align-items: center;
     backdrop-filter: blur(12px);
     background-color: rgba(35, 35, 35, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -142,85 +70,124 @@ const displayState = () => {
 		transition: all 600ms;
 	}
 
-    .logo {
-		position: absolute;
-        top: 5px;
-        left: 5px;
+	.logo {
+		padding: 3px 10px;
+		background-color: rgb(49, 49, 49);
+		border-radius: 10px;
+		transition: all 600ms;
 
 		img {
 			height: 35px;
-			padding: 5px 15px;
-			background-color: rgb(49, 49, 49);
-			border-radius: 10px;
 		}
     }
 
 	&.pinned > .logo {
-		top: 0;
-		left: 4px;
-		
+		padding: 1px 8px 2px 8px;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+
 		img {
-			height: 35px;
-			padding: 2px 15px;
-			border-top-left-radius: 0;
-			border-top-right-radius: 0;
+			height: 30px;
 		}
 	}
 
     .links {
         display: flex;
-        justify-content: center;
-        width: 60%;
-        gap: 30px;
+        gap: 25px;
     }
 
+	.buttons-block {
+		right: 5px;
+		position: absolute;
+		display: flex;
+		gap: 5px;
+	}
+
     .user {
-        position: absolute;
-        top: 5px;
-        right: 5px;
+		cursor: pointer;
         color: rgb(220, 220, 220);
         background-color: rgb(49, 49, 49);
         border-radius: 10px;
-        padding: 11px 35px;
+        padding: 6px 10px;
+		gap: 10px;
         display: flex;
-        justify-content: end;
+		align-items: center;
+		transition: background-color 200ms;
+
+		img {
+			height: 35px;
+			border-radius: 50%;
+		}
+
+		&:hover {
+        	background-color: rgb(60, 60, 60);
+		}
+
+		&:active {
+        	background-color: rgb(65, 65, 65);
+			transform: translateY(1px);
+		}
     }
 
-	&.pinned > .user {
-		top: 0;
-		right: 4px;
-        padding: 7px 35px;		
-		border-top-left-radius: 0;
-		border-top-right-radius: 0;
+	.system-configuration {
+		cursor: pointer;
+		right: 150px;
+		color: rgb(220, 220, 220);
+		background-color: rgb(49, 49, 49);
+		border-radius: 10px;
+		padding: 11px 10px;
+		gap: 10px;
+		display: flex;
+
+		img {
+			height: 25px;
+			filter: invert(1);
+			display: inline-block;
+			transform-origin: center center;
+			transition: transform 400ms ease;
+		}
+
+		&:hover {
+        	background-color: rgb(60, 60, 60);
+		}
+
+		&:hover > img {
+			transform: rotate(90deg);
+		}
+
+		&:active {
+        	background-color: rgb(65, 65, 65);
+			transform: translateY(1px);
+		}
 	}
 
-    &::after {
-        content: '';
-        position: absolute;
-        width: 180%;
-        aspect-ratio: 1;
-        left: 50%;
-        top: 50%;
-        background: radial-gradient(
-            circle,
-            rgba(255, 255, 255, 0.03) 0%,
-            rgba(255, 255, 255, 0.015) 40%,
-            transparent 70%
-        );
-        border-radius: 50%;
-        pointer-events: none;
-        opacity: 0;
-    }
+	&.pinned > .buttons-block .user {
+        padding: 5px 10px;	
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
 
-    &:active::after {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-        transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-            opacity 0.3s ease;
-    }
+		img {
+			height: 25px;
+		}
+
+		&:active {
+			transform: translateY(-1px);
+		}
+	}
+
+	&.pinned > .buttons-block .system-configuration {
+        padding: 7px 10px;	
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+
+		&:active {
+        	background-color: rgb(65, 65, 65);
+			transform: translateY(-1px);
+		}
+	}
 
 	&.pinned {
-    	padding: 8px 15px;
+    	padding: 0px 0px 5px 5px;
 		margin: 0;
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;

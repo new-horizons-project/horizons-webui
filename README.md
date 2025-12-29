@@ -45,6 +45,7 @@ Icons credentioals
 - <a href="https://www.flaticon.com/free-icons/custom" title="custom icons">Custom icons created by monkik - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/login" title="login icons">Login icons created by Pixel perfect - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/settings" title="settings icons">Settings icons created by Freepik - Flaticon</a>
 
 ### Development Team
 
