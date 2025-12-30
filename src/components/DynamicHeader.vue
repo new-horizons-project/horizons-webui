@@ -78,8 +78,14 @@ function showLoginForm() {
 
 function closeLoginForm() {
 	uiStore.displayLoginForm = false;
-	notificationController.createNotification("Logged in!", "Successfully logged in as " + authStore.username, 
-											  authStore.userAvatarUrl, "success")
+
+	if (authStore.isLoggedIn)
+		notificationController.createNotification(
+			"Logged in!", 
+			"Successfully logged in as " + authStore.username, 
+			authStore.userAvatarUrl, 
+			"success"
+		);
 }
 
 // Nav slider

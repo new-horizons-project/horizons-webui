@@ -47,7 +47,7 @@
 import { useAuthStore } from '../storage/auth';
 import { logout } from '../api/user';
 import router from '../router';
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useUiStore } from '../storage/ui';
 
 const authStore = useAuthStore();
@@ -64,6 +64,15 @@ onMounted(() => {
 		uiStore.displayLoginForm = true;
 	}
 });
+
+watch(() => uiStore.displayLoginForm, (newVal, oldVal) => {
+	// If displayLoginForm form was True, changed to false, and user wasn't logged in
+	// return to /
+	if (oldVal && !newVal && !authStore.isLoggedIn) {
+		router.push('/')
+	}
+});
+
 </script>
 
 <style lang="scss">

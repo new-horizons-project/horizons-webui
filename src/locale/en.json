@@ -20,7 +20,8 @@
 				"password" : "Password"
 			},
 			"buttons" : {
-				"login" : "Login"
+				"login" : "Login",
+				"cancel" : "Cancel"
 			}
 		}
 	}

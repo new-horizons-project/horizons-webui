@@ -22,7 +22,10 @@
 					ref="passwordInput" v-model="password" :placeholder="t('modal.login.inputs.password')" />
 			</div>
 
-			<button @click="login">{{ t('modal.login.buttons.login') }}</button>
+			<div class="button-block">
+				<button @click="login">{{ t('modal.login.buttons.login') }}</button>
+				<button @click="cancel">{{ t('modal.login.buttons.cancel') }}</button>
+			</div>
 		</div>
 	</Modal>
 </template>
@@ -51,6 +54,10 @@ const passwordInput = ref<HTMLInputElement | null>(null);
 const emit = defineEmits(['close']);
 
 const modalRef = ref<InstanceType<typeof Modal> | null>(null);
+
+function cancel() {
+	emit('close');
+}
 
 const login = async () => {
     let err = false;
@@ -193,25 +200,30 @@ input
 	&::placeholder
 		color: rgba(255, 255, 255, 0.5)
 
-button
-	margin-top: 30px
-	padding: 8px 24px
-	background: transparent
-	border: 2px solid rgba(255, 255, 255, 0.3)
-	border-radius: 5px
-	color: white
-	font-size: 16px
-	cursor: pointer
-	transition: border-color 0.2s, transform 0.15s, color 0.2s, background-color 0.2s
+.button-block 
+	display: flex
+	gap: 10px
 
-	&:hover
-		border-color: white
-		background-color: rgba(255, 255, 255, 0.109)
-		transform: translateY(-2px)
+	button
+		margin-top: 30px
+		padding: 8px 24px
+		background: transparent
+		border: 2px solid rgba(255, 255, 255, 0.3)
+		border-radius: 5px
+		width: 100px;
+		color: white
+		font-size: 16px
+		cursor: pointer
+		transition: border-color 0.2s, transform 0.15s, color 0.2s, background-color 0.2s
 
-	&:active
-		transform: translateY(1px)
-		color: rgb(200, 200, 200)
+		&:hover
+			border-color: white
+			background-color: rgba(255, 255, 255, 0.109)
+			transform: translateY(-2px)
+
+		&:active
+			transform: translateY(1px)
+			color: rgb(200, 200, 200)
 
 @media (max-width: 1000px)
 	.form-background-block
