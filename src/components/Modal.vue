@@ -89,7 +89,7 @@ defineExpose({ closeModal });
 	z-index: 1000
 
 .modal-background-block
-	background-color: rgba(35, 35, 35, 0.5)
+	background-color: rgba(35, 35, 35, 0.7)
 	border: 1px solid rgba(255, 255, 255, 0.105)
 	box-shadow: 0 1px 10px rgba(135, 135, 135, 0.1)
 	border-radius: 5px
@@ -103,6 +103,7 @@ defineExpose({ closeModal });
 	transition: width 0.3s, height 0.3s, padding 0.3s
 
 .slot-wrapper
+	overflow: scroll
 	display: flex
 	flex-direction: column
 	align-items: center

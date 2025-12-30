@@ -31,6 +31,6 @@ const removeNotification = (id: string) => notificationController.removeNotifica
     display: flex
     flex-direction: column
     gap: 10px
-    z-index: 10
+    z-index: 1001
 
 </style>

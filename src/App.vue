@@ -1,6 +1,8 @@
 <template>
-	<DynamicHeader />
-    <router-view v-if="authStore.isLoggedIn"/>
+	<div class="wrapper">
+		<DynamicHeader />
+		<router-view />
+	</div>
     <Loading v-if="!uiStore.apiConnecitonChecked" :message="t('loading.connection.messages.header')" :substr="reconnectMessageSubstr"/>
     <NotificationController />
 </template>
@@ -16,7 +18,7 @@ import { ping } from './api/app';
 import DynamicHeader from './components/DynamicHeader.vue';
 import Loading from './components/Loading.vue';
 import NotificationController from './components/NotificationController.vue';
-import { notificationController } from './scripts/notificationController';
+// import { notificationController } from './scripts/notificationController';
 
 const authStore = useAuthStore();
 const uiStore = useUiStore();
@@ -74,3 +76,14 @@ async function begin() {
     await begin();
 })();
 </script>
+
+<style lang="scss">
+
+.wrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+</style>

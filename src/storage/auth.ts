@@ -3,6 +3,7 @@ import { ref } from "vue"
 
 export const useAuthStore = defineStore('general', () => {
 	const username = ref<string>('');
+	const userAvatarUrl = ref<string | undefined>(undefined);
 	const token = ref<string>('');
 	const isLoggedIn = ref<boolean>(false);
 
@@ -17,5 +18,5 @@ export const useAuthStore = defineStore('general', () => {
 		token.value = '';
 	}
 
-	return {username, token, isLoggedIn, setLogin, setLogout }
+	return {username, token, isLoggedIn, setLogin, setLogout, userAvatarUrl }
 })

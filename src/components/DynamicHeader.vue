@@ -1,61 +1,195 @@
 <template>
-	<div class="wrapper">
-		<div class="header">
+	<div class="header-wrapper" :class="{ pinned: scrolled }">
+		<div class="header" :class="{ pinned: scrolled }">
 			<div class="logo">
-				<img src="http://127.0.0.1:8000/static/1?size=thumbnail" alt="">
+				<img :src="uiStore.imageUrl" alt="NH">
 			</div>
 
-			<div class="links">
-				<a href="/" class="underline">Home</a>
-				<a href="/">News</a>
-				<a href="/">Pinned 1</a>
-				<a href="/">Pinned 2</a>
-				<a href="/">Pinned 3</a>
-				<a href="/">Communities</a>
-				<a href="/">Search</a>
-			</div>
+			<nav class="links" ref="nav">
+				<router-link
+					v-for="link in links"
+					:key="link.to"
+					:to="link.to"
+					class="link"
+					ref="items"
+				>
+					{{ link.label }}
+				</router-link>
+
+				<div class="indicator" :style="indicatorStyle"></div>
+			</nav>
 
 			<div class="buttons-block">
-				<div class="system-configuration">
+				<router-link class="system-configuration" to="/system">
 					<img src="/icons/gear.png" alt="">
-				</div>
+				</router-link>
 
-				<div class="user">
-					<img src="/icons/avatar.jpg" alt="">
+				<router-link v-if="authStore.isLoggedIn" class="user" to="/my">
+					<img v-if="authStore.userAvatarUrl" :src="authStore.userAvatarUrl" alt="">
+					<div v-else class="user-avatar-alter">
+						{{ authStore.username[0]?.toUpperCase() }}
+					</div>
 
-					ElCapitan
-				</div>
+					{{ authStore.username }}
+				</router-link>
+				<button v-else @click="showLoginForm" class="user">
+					<img src="/icons/login.png" class="icon">
+				</button>
 			</div>
 		</div>
 	</div>
+	<Login v-if="uiStore.displayLoginForm" @close="closeLoginForm"/>
 </template>
 
+<script setup lang="ts">
+
+import { 
+	ref, 
+	onMounted,
+	nextTick,
+	onUnmounted,
+	computed,
+	watch 
+} from 'vue';
+import { useUiStore } from '../storage/ui';
+import { useRoute } from 'vue-router';
+import { useAuthStore } from '../storage/auth';
+import Login from './Login.vue';
+
+import { notificationController } from '../scripts/notificationController';
+
+const authStore = useAuthStore();
+const uiStore = useUiStore();
+const route = useRoute();
+
+// Login
+watch(() => uiStore.displayLoginForm, (isOpen) => {
+	if (isOpen) {
+		document.body.style.overflow = 'hidden';
+		return;
+	}
+
+	document.body.style.overflow = 'initial';
+});
+
+function showLoginForm() {
+	uiStore.displayLoginForm = true;
+}
+
+function closeLoginForm() {
+	uiStore.displayLoginForm = false;
+	notificationController.createNotification("Logged in!", "Successfully logged in as " + authStore.username, 
+											  authStore.userAvatarUrl, "success")
+}
+
+// Nav slider
+const links = [
+	{
+		label: 'Home',
+		to: '/'
+	},
+	{
+		label: 'Latest',
+		to: '/latest'
+	},
+	{
+		label: 'Categories',
+		to: '/categories'
+	}
+]
+
+const nav = ref<HTMLElement | null>(null)
+const items = ref<HTMLElement[]>([])
+
+const indicator = ref({ left: 0, width: 0 })
+
+const updateIndicator = async () => {
+	await nextTick();
+
+	const index = links.findIndex(l => l.to === route.path);
+	const element = items.value[index];
+	const parent = nav.value;
+
+	if (!element || !parent) return;
+
+	const element_rect = element.getBoundingClientRect();
+	const parent_rect = parent.getBoundingClientRect();
+
+	indicator.value = {
+		left: element_rect.left - parent_rect.left,
+		width: element_rect.width
+	};
+};
+
+const indicatorStyle = computed(() => {
+	const index = links.findIndex(l => l.to === route.path)
+
+	if (index == -1) return { opacity: 0 } 
+
+	return {
+		transform: `translateX(${indicator.value.left}px)`,
+		width: `${indicator.value.width}px`,
+		opacity: 1
+	}
+})
+
+watch(() => route.path, updateIndicator);
+
+// Scroll event
+const scrolled = ref<boolean>(false);
+
+const onScroll = () => {
+	scrolled.value = window.scrollY > 10
+};
+
+onMounted(() => {
+	window.addEventListener('scroll', onScroll, { passive: true });
+	updateIndicator();
+
+	if (nav.value) {
+		items.value = Array.from(nav.value.querySelectorAll('.link')) as HTMLElement[]
+	}
+
+	updateIndicator()
+});
+
+onUnmounted(() => {
+	window.removeEventListener('scroll', onScroll)
+});
+
+</script>
+
 <style lang="scss" scoped>
-.wrapper {
+.header-wrapper {
 	width: 100%;
 	height: min-content;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	z-index: 1000;
+
+	&.pinned {
+		position: fixed;
+		top: 0;
+	}
 }
 
 .header {
-    overflow: hidden;
-	padding: 5px;
-    margin: 10px;
-    font-size: 16px;
-    width: 75%;
-    display: flex;
-	font-weight: 600;
-    gap: 25px;
-    border-radius: 15px;
+	width: 75%;
+	display: flex;
 	align-items: center;
-    backdrop-filter: blur(12px);
-    background-color: rgba(35, 35, 35, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-	transition: all 600ms;
+	font-size: 16px;
+	font-weight: 600;
+	gap: 25px;
+	padding: 5px;
+	margin: 10px;
+	border-radius: 15px;
+	backdrop-filter: blur(12px);
+	background-color: rgba(35, 35, 35, 0.35);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 	user-select: none;
+	transition: padding 400ms, border-radius 400ms;
 
 	&.compact {
 		cursor: pointer;
@@ -66,35 +200,60 @@
 		font-size: 14px;
 	}
 
-	.header * {
-		transition: all 600ms;
+	* {
+		transition: padding 400ms, border-radius 400ms;
+	}
+
+	img {
+		transition: height 400ms;
 	}
 
 	.logo {
 		padding: 3px 10px;
-		background-color: rgb(49, 49, 49);
-		border-radius: 10px;
-		transition: all 600ms;
+		min-height: 40px;
+		transform: translateY(2px);
 
 		img {
-			height: 35px;
-		}
-    }
-
-	&.pinned > .logo {
-		padding: 1px 8px 2px 8px;
-		border-top-left-radius: 0;
-		border-top-right-radius: 0;
-
-		img {
-			height: 30px;
+			height: 35px; 
 		}
 	}
 
-    .links {
-        display: flex;
-        gap: 25px;
-    }
+	&.pinned > .logo {
+		padding: 1px 8px 2px;
+		min-height: 35px;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+
+		img { 
+			height: 30px; 
+		}
+	}
+
+	.links {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 25px;
+
+		.link {
+			position: relative;
+			padding: 6px 2px;
+			text-decoration: none;
+			color: white;
+			font-weight: 500;
+		}
+	}
+
+	.indicator {
+		position: absolute;
+		bottom: 0;
+		height: 3px;
+		border-radius: 3px;
+		background: white;
+		transition: transform 400ms cubic-bezier(.34,1.26,.64,1),
+					width 300ms ease,
+					opacity 300ms ease;
+	}
 
 	.buttons-block {
 		right: 5px;
@@ -103,95 +262,98 @@
 		gap: 5px;
 	}
 
-    .user {
+	.user, .system-configuration {
 		cursor: pointer;
-        color: rgb(220, 220, 220);
-        background-color: rgb(49, 49, 49);
-        border-radius: 10px;
-        padding: 6px 10px;
-		gap: 10px;
-        display: flex;
+		display: flex;
 		align-items: center;
-		transition: background-color 200ms;
+		gap: 10px;
+		transition: background-color 400ms;
 
-		img {
+		&:active {
+			transform: translateY(1px);
+		}
+	}
+
+	.user {
+		padding: 6px 10px;
+		transition: color 200ms;
+
+		img { 
 			height: 35px;
 			border-radius: 50%;
 		}
 
-		&:hover {
-        	background-color: rgb(60, 60, 60);
+		img.icon {
+			height: 30px;
+			border-radius: 0px;
+			transition: filter 200ms;
+
+			&:hover {
+				filter: invert(var(--icon-hover-filter))
+			}
 		}
 
-		&:active {
-        	background-color: rgb(65, 65, 65);
-			transform: translateY(1px);
+		.user-avatar-alter {
+			border: 1px solid transparent;
+			border-radius: 50%;
+			background-color: rgb(52, 52, 52);
+			padding: 3px 10px;
 		}
-    }
+
+		&:hover {
+			color: rgb(205, 205, 205);
+		}
+	}
 
 	.system-configuration {
-		cursor: pointer;
-		right: 150px;
 		color: rgb(220, 220, 220);
-		background-color: rgb(49, 49, 49);
-		border-radius: 10px;
 		padding: 11px 10px;
-		gap: 10px;
-		display: flex;
 
 		img {
 			height: 25px;
 			filter: invert(1);
-			display: inline-block;
 			transform-origin: center center;
-			transition: transform 400ms ease;
+			transition: transform 400ms ease, height 400ms;
 		}
 
-		&:hover {
-        	background-color: rgb(60, 60, 60);
-		}
-
-		&:hover > img {
-			transform: rotate(90deg);
-		}
-
-		&:active {
-        	background-color: rgb(65, 65, 65);
-			transform: translateY(1px);
-		}
-	}
-
-	&.pinned > .buttons-block .user {
-        padding: 5px 10px;	
-		border-top-left-radius: 0;
-		border-top-right-radius: 0;
-
-		img {
-			height: 25px;
-		}
-
-		&:active {
-			transform: translateY(-1px);
-		}
-	}
-
-	&.pinned > .buttons-block .system-configuration {
-        padding: 7px 10px;	
-		border-top-left-radius: 0;
-		border-top-right-radius: 0;
-
-		&:active {
-        	background-color: rgb(65, 65, 65);
-			transform: translateY(-1px);
+		&:hover > img { 
+			transform: rotate(90deg); 
 		}
 	}
 
 	&.pinned {
-    	padding: 0px 0px 5px 5px;
+		padding: 0 0 5px 5px;
 		margin: 0;
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;
 		border-top: none;
+
+		.logo {
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+			border-top-color: transparent;
+		}
+
+		.buttons-block {
+			.user, .system-configuration {
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+				border-top-color: transparent;
+			}
+
+			.system-configuration { 
+				padding: 7px 10px; 
+			}
+
+			.user { 
+				padding: 5px 10px; 
+				
+				img { 
+					height: 25px; 
+				} 
+			
+			}
+		}
 	}
 
 	.hidden {
@@ -204,17 +366,12 @@
 }
 
 a {
-    text-decoration: none;
+	text-decoration: none;
 	color: white;
-	transition: color 200ms;
+}
 
-	&.underline {
-		border-bottom: 2px solid white;
-	}
-
-	&:hover {
-		color: rgb(197, 197, 197);
-		border-bottom-color: rgb(197, 197, 197);
-	}
+button {
+	border: none;
+	background-color: transparent;
 }
 </style>
