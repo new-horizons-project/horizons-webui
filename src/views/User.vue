@@ -159,7 +159,7 @@ watch(() => uiStore.displayLoginForm, (newVal, oldVal) => {
 			.text {
 				position: absolute;
 				right: 5px;
-				font-weight: 600;
+				font-weight: 500;
 			}
 
 			.role {
