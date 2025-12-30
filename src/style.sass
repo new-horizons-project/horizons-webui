@@ -29,6 +29,8 @@
 	-moz-osx-font-smoothing: grayscale
 
 	--icon-hover-filter: 0.7;
+	--background-color: rgb(49, 49, 49);
+	--border-color: rgba(255, 255, 255, 0.15);
 
 body, html
 	margin: 0
@@ -57,3 +59,15 @@ body, html
 	&:active
 		background-color: rgba(65, 65, 65, 0.5)
 		transform: translateY(1px)
+
+.block-style
+	border-radius: 15px;
+	backdrop-filter: blur(12px);
+	background-color: rgba(35, 35, 35, 0.35);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+.user-avatar-alter
+	border: 1px solid transparent
+	border-radius: 50%
+	background-color: rgb(52, 52, 52)

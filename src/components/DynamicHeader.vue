@@ -1,6 +1,6 @@
 <template>
 	<div class="header-wrapper" :class="{ pinned: scrolled }">
-		<div class="header" :class="{ pinned: scrolled }">
+		<div class="header block-style" :class="{ pinned: scrolled }">
 			<div class="logo">
 				<img :src="uiStore.imageUrl" alt="NH">
 			</div>
@@ -27,10 +27,10 @@
 				<router-link v-if="authStore.isLoggedIn" class="user" to="/my">
 					<img v-if="authStore.userAvatarUrl" :src="authStore.userAvatarUrl" alt="">
 					<div v-else class="user-avatar-alter">
-						{{ authStore.username[0]?.toUpperCase() }}
+						{{ authStore.user?.username[0]?.toUpperCase() }}
 					</div>
 
-					{{ authStore.username }}
+					{{ authStore.user?.username }}
 				</router-link>
 				<button v-else @click="showLoginForm" class="user">
 					<img src="/icons/login.png" class="icon">
@@ -183,11 +183,6 @@ onUnmounted(() => {
 	gap: 25px;
 	padding: 5px;
 	margin: 10px;
-	border-radius: 15px;
-	backdrop-filter: blur(12px);
-	background-color: rgba(35, 35, 35, 0.35);
-	border: 1px solid rgba(255, 255, 255, 0.15);
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 	user-select: none;
 	transition: padding 400ms, border-radius 400ms;
 
@@ -294,9 +289,6 @@ onUnmounted(() => {
 		}
 
 		.user-avatar-alter {
-			border: 1px solid transparent;
-			border-radius: 50%;
-			background-color: rgb(52, 52, 52);
 			padding: 3px 10px;
 		}
 

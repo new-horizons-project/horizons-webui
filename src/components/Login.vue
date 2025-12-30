@@ -31,7 +31,7 @@
 import Modal from './Modal.vue';
 import { ref } from 'vue';
 import { useAuthStore } from '../storage/auth';
-import { loginUser } from '../api/user';
+import { loginUser, User } from '../api/user';
 import { useI18n } from 'vue-i18n';
 
 const authStore = useAuthStore();
@@ -75,7 +75,8 @@ const login = async () => {
         if (res.status === 200) {
             loadingText.value = 'Setting up credentials...';
             authStore.token = res.data.access_token;
-            authStore.setLogin(username.value);
+			authStore.user = await User.create();
+			authStore.isLoggedIn = true;
 
             await modalRef.value?.closeModal();
 

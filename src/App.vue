@@ -1,5 +1,5 @@
 <template>
-	<div class="wrapper">
+	<div class="wrapper" v-if="appReady">
 		<DynamicHeader />
 		<router-view />
 	</div>
@@ -8,10 +8,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useAuthStore } from './storage/auth';
 import { useUiStore } from './storage/ui';
-import { reloadToken, loadUser } from './api/user';
+import { reloadToken, User } from './api/user';
 import { useI18n } from 'vue-i18n';
 import { ping } from './api/app';
 
@@ -26,6 +26,8 @@ const { t } = useI18n();
 const reconnectMessageSubstr = ref<string>("");
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+const appReady = ref<boolean>(false);
 
 async function testApi() {
     for (let i = 0; i < 5; i++) {
@@ -51,9 +53,8 @@ async function restoreUser() {
         const res = await reloadToken();
         if (res.status === 200) {
             authStore.token = res.data.access_token;
-            const user = await loadUser();
-            authStore.setLogin(user.username);
-            uiStore.apiConnecitonChecked = true;
+			authStore.user = await User.create();
+			authStore.isLoggedIn = true;
         }
     } catch (err: any) {
         if (err.status === 401) {
@@ -70,11 +71,14 @@ async function begin() {
     if (!authStore.isLoggedIn) {
         await restoreUser();
     }
+
+	appReady.value = true;
 }
 
-(async () => {
+onMounted(async () => {
     await begin();
-})();
+});
+
 </script>
 
 <style lang="scss">
