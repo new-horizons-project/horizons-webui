@@ -82,7 +82,7 @@ function closeLoginForm() {
 	if (authStore.isLoggedIn)
 		notificationController.createNotification(
 			"Logged in!", 
-			"Successfully logged in as " + authStore.username, 
+			"Successfully logged in as " + authStore.user?.username, 
 			authStore.userAvatarUrl, 
 			"success"
 		);

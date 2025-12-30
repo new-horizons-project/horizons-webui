@@ -67,9 +67,9 @@ onMounted(() => {
 
 watch(() => uiStore.displayLoginForm, (newVal, oldVal) => {
 	// If displayLoginForm form was True, changed to false, and user wasn't logged in
-	// return to /
+	// return to previous location
 	if (oldVal && !newVal && !authStore.isLoggedIn) {
-		router.push('/')
+		router.back();
 	}
 });
 

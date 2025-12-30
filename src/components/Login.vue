@@ -17,9 +17,9 @@
 
 			<div class="input-block" v-if="!userMustChangePassword">
 				<input type="text" :class="{ error: usernameErr }" @focus="usernameErr = false"
-					ref="usernameInput" v-model="username" :placeholder="t('modal.login.inputs.username')" />
+					v-model="username" :placeholder="t('modal.login.inputs.username')" />
 				<input type="password" :class="{ error: passwordErr }" @focus="passwordErr = false"
-					ref="passwordInput" v-model="password" :placeholder="t('modal.login.inputs.password')" />
+					v-model="password" :placeholder="t('modal.login.inputs.password')" />
 			</div>
 
 			<div class="button-block">
@@ -48,8 +48,6 @@ const loadingText = ref<string>('Trying to log in...')
 
 const usernameErr = ref<boolean>(false);
 const passwordErr = ref<boolean>(false);
-const usernameInput = ref<HTMLInputElement | null>(null);
-const passwordInput = ref<HTMLInputElement | null>(null);
 
 const emit = defineEmits(['close']);
 
