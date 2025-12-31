@@ -42,7 +42,6 @@
 </template>
 
 <script setup lang="ts">
-
 import { 
 	ref, 
 	onMounted,
@@ -181,7 +180,7 @@ onUnmounted(() => {
 }
 
 .header {
-	width: 75%;
+	width: 90%;
 	display: flex;
 	align-items: center;
 	font-size: 16px;
