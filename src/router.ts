@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from './views/Home.vue';
 import PgNotFound from './views/errorPages/PgNotFound.vue';
-import Api from './views/Api.vue';
 import User from './views/User.vue';
+import Categories from './views/Categories.vue';
+import CategoriesList from './views/CategoriesList.vue';
+import Category from './views/Category.vue';
 
 const routes = [
 	{
@@ -16,9 +18,19 @@ const routes = [
 		component: User
 	},
 	{
-		path: '/api',
-		name: 'API',
-		component: Api
+		path: '/categories',
+		name: 'Categories',
+		component: Categories,
+		children: [
+			{
+				path: '',
+				component: CategoriesList
+			},
+			{
+				path: ':id',
+				component: Category
+			}
+		]
 	},
 	{
 		path: '/:pathMatch(.*)*',
