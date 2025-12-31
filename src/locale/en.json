@@ -1,0 +1,28 @@
+{
+	"loading": {
+		"connection" : {
+			"messages" : {
+				"header" : "Seems like we have a problem with connecting to the API<br>Contact administrator",
+				"substring" : { 
+					"1": "Attempt {attempt} of {attempts}",
+					"2": "Reload the page to retry connection"
+				}
+			}
+		}
+	},
+	"notifications" : {
+		
+	},
+	"modal" : {
+		"login" : {
+			"inputs" : {
+				"username" : "Username",
+				"password" : "Password"
+			},
+			"buttons" : {
+				"login" : "Login",
+				"cancel" : "Cancel"
+			}
+		}
+	}
+}

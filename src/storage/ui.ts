@@ -1,19 +1,23 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
+import { getImageUrl } from "../api/app";
 
 export const useUiStore = defineStore('ui', () => {
 	const displayLoginForm = ref<boolean>(false);
-	const showLoadingBlocked = ref<boolean>(false);
+	const showLoading = ref<boolean>(false);
+	const apiConnecitonChecked = ref<boolean>(false);
+	const imageUrl = ref<string>("");
 
-	function showLoginForm () {
-		displayLoginForm.value = true;
-		showLoadingBlocked.value = true;
+	const initImage = async () => {
+		imageUrl.value = await getImageUrl();
+	};
+
+	initImage();
+
+	return {
+		displayLoginForm, 
+		showLoading,
+		apiConnecitonChecked,
+		imageUrl
 	}
-
-	function hideLoginForm () {
-		displayLoginForm.value = false;
-		showLoadingBlocked.value = false;
-	}
-
-	return {displayLoginForm, showLoadingBlocked, showLoginForm, hideLoginForm}
 });

@@ -1,106 +1,141 @@
 <template>
-	<Transition name="fade">
-		<div :class="['notification', typeClass]" @click="emit('close')">
-			<div class="notification-block">
-				<img height="55" :src="src">
+	<div :class="['notification', typeClass, show ? 'show' : 'hide']" @click="handleClose">
+		<div class="notification-block">
+			<img v-if="src" :src="src" height="55" class="notif-img"/>
 
-				<div class="text-block">
-					<h3><slot>{{ header }}</slot></h3>
-					<p><slot>{{ message }}</slot></p>
-				</div>
+			<div class="text-block">
+				<h3>{{ header }}</h3>
+				<p>{{ message }}</p>
 			</div>
 		</div>
-	</Transition>
+
+		<div class="progress-bar" :style="{ width: progress + '%' }"></div>
+	</div>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineEmits } from 'vue';
-
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 const emit = defineEmits(['close']);
 
 const props = defineProps<{
 	header: string,
 	message: string,
-	type?: 'error' | 'info' | 'success';
-	src: string;
+	type?: 'error' | 'info' | 'success',
+	src?: string
 }>();
+
+const show = ref(false);
+const progress = ref(100);
+let interval: number;
 
 const typeClass = computed(() => {
   switch (props.type) {
-    case 'success': return 'success';
-    case 'error': return 'error';
-    case 'info': return 'info';
-    default: return '';
+	case 'success': return 'success';
+	case 'error': return 'error';
+	case 'info': return 'info';
+	default: return '';
   }
 });
 
+onMounted(() => {
+	show.value = true;
+
+	const time = 5000;
+	const step = 50;
+
+	interval = window.setInterval(() => {
+		progress.value -= step / time * 100;
+
+		if (progress.value <= 0) {
+			clearInterval(interval);
+			hideAndClose();
+		}
+	}, step);
+});
+
+onBeforeUnmount(() => {
+	clearInterval(interval);
+});
+
+function hideAndClose() {
+	show.value = false;
+	setTimeout(() => emit('close'), 350);
+}
+
+function handleClose() {
+	clearInterval(interval);
+	hideAndClose();
+}
 </script>
 
-<style scoped>
-.notification {
-	cursor: pointer;
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.105);
-	background-color: rgba(35, 35, 35, 0.5);
-	box-shadow: 0 1px 10px rgba(135, 135, 135, 0.1);
-	padding: 10px;
-	border-radius: 5px;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	min-width: 300px;
-	max-width: 400px;
-	transition: transform 0.1s;
-	opacity: 0;
-	transform: translateX(10px);
-	animation: appear 0.6s ease forwards;
-}
 
-.notification:hover {
-	box-shadow: 0 2px 20px rgba(135, 135, 135, 0.1);
-	transform: scale(1.02);
-}
+<style scoped lang="sass">
 
-.notification-block {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 10px;
-}
+.notification
+	cursor: pointer
+	border-radius: 12px
+	display: flex
+	flex-direction: column
+	padding: 12px
+	min-width: 300px
+	max-width: 400px
+	backdrop-filter: blur(12px)
+	background-color: rgba(35,35,35,0.35)
+	border: 1px solid rgba(255,255,255,0.15)
+	box-shadow: 0 8px 30px rgba(0,0,0,0.3)
+	transform: scale(0.9)
+	opacity: 0
+	transition: all 0.35s cubic-bezier(0.25,1,0.5,1)
+	gap: 5px;
 
-h3, p {
-	padding: 0;
-	margin: 0;
-}
+	&.show
+		opacity: 1
+		transform: scale(1)
 
-button {
-	padding: 2px 12px;
-	background: transparent;
-	border: 2px solid rgba(255, 255, 255, 0.3);
-	border-radius: 5px;
-	color: white;
-	font-size: 16px;
-	cursor: pointer;
-	transition: border-color 0.2s, transform 0.15s, color 0.2s, background-color 0.2s;
-}
+	&.hide
+		opacity: 0
+		transform: scale(0.85)
 
-button:hover {
-	border-color: white;
-	background-color: rgba(255, 255, 255, 0.109);
-	transform: translateY(-2px);
-}
+.notification-block
+	display: flex
+	align-items: center
+	gap: 12px
 
-button:active {
-	transform: translateY(1px);
-	color: rgb(200, 200, 200);
-}
+.notif-img
+	padding-left: 5px
+	filter: invert(1)
+	width: 40px;
+	height: 40px;
 
-@keyframes appear {
-	to {
-		opacity: 1;
-		transform: translateX(0);
-	}
-}
+.text-block
+	display: flex
+	flex-direction: column
+	gap: 4px
+
+h3
+	margin: 0
+	font-size: 16px
+	font-weight: 600
+	color: white
+
+p
+	margin: 0
+	font-size: 14px
+	color: #ddd
+
+.progress-bar
+	height: 4px
+	border-radius: 2px
+	margin-top: 6px
+	transition: width 0.05s linear
+
+.notification.success .progress-bar
+	background-color: rgba(76, 175, 80, 0.8)
+
+.notification.error .progress-bar
+	background-color: rgba(244, 67, 54, 0.8)
+
+.notification.info .progress-bar
+	background-color: rgba(33, 150, 243, 0.8)
+
 </style>
