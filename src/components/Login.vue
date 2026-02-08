@@ -1,6 +1,6 @@
 <template>
-	<Modal ref="modalRef" :width=55 :height=450 measure-width="%" measure-height="px"
-	padding-set="35px" opacity-speed="0.2s" :max-width="700">
+	<Modal ref="modalRef" :width=600 :height=700 measure-width="px" measure-height="px"
+	padding-set="15px" opacity-speed="0.2s">
 		<img src="http://127.0.0.1:8000/static/1?size=small" width="150" alt="">
 
 		<div class="loading-screen" v-if="loadingScreen">
@@ -11,20 +11,27 @@
 		<div v-else class="login-form">
 			<div class="image-block">
 				<div class="text">
-					New Horizons Project
+					Login with local account
 				</div>
 			</div>
 
 			<div class="input-block" v-if="!userMustChangePassword">
-				<input type="text" :class="{ error: usernameErr }" @focus="usernameErr = false"
-					v-model="username" :placeholder="t('modal.login.inputs.username')" />
-				<input type="password" :class="{ error: passwordErr }" @focus="passwordErr = false"
-					v-model="password" :placeholder="t('modal.login.inputs.password')" />
+				<div class="input" :class="{ error: usernameErr }">
+					<div class="placeholder">{{ t('modal.login.inputs.username') }}</div>
+					<input type="text" placeholder=" " @focus="usernameErr = false"
+						v-model="username" />
+				</div>
+
+				<div class="input" :class="{ error: passwordErr }">
+					<div class="placeholder">{{ t('modal.login.inputs.password') }}</div>
+					<input type="password" @focus="passwordErr = false"
+						v-model="password" placeholder=" " />
+				</div>
 			</div>
 
 			<div class="button-block">
-				<button @click="login">{{ t('modal.login.buttons.login') }}</button>
-				<button @click="cancel">{{ t('modal.login.buttons.cancel') }}</button>
+				<button class="button-style" @click="login">{{ t('modal.login.buttons.login') }}</button>
+				<button class="button-style" @click="cancel">{{ t('modal.login.buttons.cancel') }}</button>
 			</div>
 		</div>
 	</Modal>
@@ -112,14 +119,15 @@ const login = async () => {
 	width: 100%
 	display: flex
 	flex-direction: column
+	justify-content: space-around
 	align-items: center
-	gap: 10px
+	gap: 40px
 
 .loading-screen
 	inset: 0
 	display: flex
 	flex-direction: column
-	gap: 100px
+	gap: 50px
 	justify-content: center
 	align-items: center
 	color: white
@@ -155,73 +163,84 @@ const login = async () => {
 	gap: 20px
 	color: rgb(210, 210, 210)
 
-		img:
-			width: 150px
-			height: auto
-			object-fit: contain
-			opacity: 0
-			transform: scale(0.95)
-			animation: imageAppear 0.8s ease forwards 0.2s
+	img:
+		width: 150px
+		height: auto
+		object-fit: contain
+		opacity: 0
+		transform: scale(0.95)
+		animation: imageAppear 0.8s ease forwards 0.2s
 
 .text
 	font-size: 28px
 	font-weight: 600
+	text-align: center
 
 .input-block
-	width: 80%
+	width: 85%
 	display: flex
 	flex-direction: column
-	gap: 25px
-	margin-top: 10px
+	gap: 15px
 
 .error
 	border-bottom-color: rgb(153, 52, 52) !important
 	animation: shake 0.3s ease
 
-input
-	background: transparent
-	border: none
-	border-bottom: 2px solid rgba(255, 255, 255, 0.3)
-	padding: 10px
+.input
+	border: 1px solid var(--border-color)
+	border-radius: 15px
 	font-size: 16px
+	padding-top: 15px
 	color: white
 	outline: none
 	transition: border-color 0.3s, transform 0.15s
+	position: relative
+
+	.placeholder
+		position: absolute
+		left: 10px
+		top: 50%
+		transform: translateY(-50%)
+		user-select: none
+		color: rgba(255, 255, 255, 0.5)
+		transition: transform 0.15s, font-size 0.15s, opacity 0.15s
+		pointer-events: none
+		z-index: 1
+
+	input
+		z-index: 2
+		font-size: 15px
+		padding: 10px 10px
+		width: 100%
+		border: none
+		background: none
+		color: inherit
+		outline: none
 
 	&:hover
-		border-bottom-color: rgba(255, 255, 255, 0.5)
+		border-color: rgba(255, 255, 255, 0.3)
 
-	&:focus
-		border-bottom-color: white
-		transform: scale(1.02)
+	&:focus-within
+		border-color: rgba(255, 255, 255, 0.3)
+		color: rgba(255, 255, 255, 0.9)
+		
+	&:focus-within .placeholder, &:has(input:not(:placeholder-shown)) .placeholder
+		transform: translateY(-120%)
+		font-size: 13px
+		opacity: 0.8
 
-	&::placeholder
-		color: rgba(255, 255, 255, 0.5)
+	&.error 
+		border-color: rgb(170, 50, 50)
 
 .button-block 
 	display: flex
 	gap: 10px
 
 	button
-		margin-top: 30px
-		padding: 8px 24px
-		background: transparent
-		border: 2px solid rgba(255, 255, 255, 0.3)
-		border-radius: 5px
-		width: 100px;
-		color: white
-		font-size: 16px
+		padding: 10px 24px
 		cursor: pointer
-		transition: border-color 0.2s, transform 0.15s, color 0.2s, background-color 0.2s
-
-		&:hover
-			border-color: white
-			background-color: rgba(255, 255, 255, 0.109)
-			transform: translateY(-2px)
-
-		&:active
-			transform: translateY(1px)
-			color: rgb(200, 200, 200)
+		font-size: 16px
+		font-weight: 500
 
 @media (max-width: 1000px)
 	.form-background-block

@@ -1,0 +1,16 @@
+@use "sass:map";
+
+$themes: (
+	light: (
+	),
+	dark: (
+	)
+);
+
+@mixin set-theme($theme) {
+	$target: map.get($themes, $theme);
+
+	@each $k, $v in $target {
+		--#{$k}: #{$v};
+	}
+}

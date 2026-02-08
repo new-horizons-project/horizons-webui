@@ -171,9 +171,11 @@ watch(() => uiStore.displayLoginForm, (newVal, oldVal) => {
 				font-weight: 500;
 				color: white;
 				background: rgba(255, 255, 255, 0.08);
+				border: 1px solid rgba(255, 255, 255, 0.4);
 
 				&.administrator {
-					background: linear-gradient(135deg, rgba(34, 197, 94, 0.9),rgba(21, 128, 61, 0.9));
+					border-color: rgb(67, 230, 126);
+					background: rgba(67, 230, 126, 0.4);
 				}
 
 				&.moderator {
