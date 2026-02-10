@@ -1,7 +1,8 @@
 <template>
 	<Modal ref="modalRef" :width=600 :height=700 measure-width="px" measure-height="px"
 	padding-set="15px" opacity-speed="0.2s">
-		<img src="http://127.0.0.1:8000/static/1?size=small" width="150" alt="">
+	<div class="modal-wrapper">
+		<img :src="uiStore.imageUrl + '?size=medium'" width="150" alt="">
 
 		<div class="loading-screen" v-if="loadingScreen">
 			<div class="loading-circle"></div>
@@ -16,17 +17,8 @@
 			</div>
 
 			<div class="input-block" v-if="!userMustChangePassword">
-				<div class="input" :class="{ error: usernameErr }">
-					<div class="placeholder">{{ t('modal.login.inputs.username') }}</div>
-					<input type="text" placeholder=" " @focus="usernameErr = false"
-						v-model="username" />
-				</div>
-
-				<div class="input" :class="{ error: passwordErr }">
-					<div class="placeholder">{{ t('modal.login.inputs.password') }}</div>
-					<input type="password" @focus="passwordErr = false"
-						v-model="password" placeholder=" " />
-				</div>
+				<InputSingle type="text" v-model="username" ref="userInputRef" :text='t("modal.login.inputs.username")' />
+				<InputSingle type="password" v-model="password" ref="passInputRef" :text='t("modal.login.inputs.password")' />
 			</div>
 
 			<div class="button-block">
@@ -34,6 +26,7 @@
 				<button class="button-style" @click="cancel">{{ t('modal.login.buttons.cancel') }}</button>
 			</div>
 		</div>
+	</div>
 	</Modal>
 </template>
 
@@ -43,24 +36,31 @@ import { ref } from 'vue';
 import { useAuthStore } from '../storage/auth';
 import { loginUser, User } from '../api/user';
 import { useI18n } from 'vue-i18n';
+import { useUiStore } from '../storage/ui';
+import InputSingle from './InputSingle.vue';
 
 const authStore = useAuthStore();
+const uiStore = useUiStore();
 const { t } = useI18n();
 
 const loadingScreen = ref(false);
 const userMustChangePassword = ref(false);
-const username = ref<string>('')  
-const password = ref<string>('')
 const loadingText = ref<string>('Trying to log in...')
+const modalRef = ref<InstanceType<typeof Modal> | null>(null);
 
 const usernameErr = ref<boolean>(false);
 const passwordErr = ref<boolean>(false);
 
 const emit = defineEmits(['close']);
 
-const modalRef = ref<InstanceType<typeof Modal> | null>(null);
+const userInputRef = ref<InstanceType<typeof InputSingle> | null>(null);
+const passInputRef = ref<InstanceType<typeof InputSingle> | null>(null);
+const username = ref<string>('');
+const password = ref<string>('');
 
-function cancel() {
+async function cancel() {
+	await modalRef.value?.closeModal();
+
 	emit('close');
 }
 
@@ -69,12 +69,12 @@ const login = async () => {
 
     if (username.value === '') {
         err = true;
-        usernameErr.value = true;
+        userInputRef.value?.setError(true);
     }
 
     if (password.value === '') {
         err = true;
-        passwordErr.value = true;
+        passInputRef.value?.setError(true);
     }
 
     if (err) return;
@@ -115,6 +115,16 @@ const login = async () => {
 </script>
 
 <style lang="sass" scoped>
+.modal-wrapper
+	overflow: hidden
+	width: 100%
+	height: 100%
+	display: flex
+	flex-direction: column
+	justify-content: center
+	align-items: center
+	gap: 20px
+
 .login-form
 	width: 100%
 	display: flex
@@ -127,7 +137,7 @@ const login = async () => {
 	inset: 0
 	display: flex
 	flex-direction: column
-	gap: 50px
+	gap: 20px
 	justify-content: center
 	align-items: center
 	color: white
@@ -137,7 +147,7 @@ const login = async () => {
 .loading-circle
 	width: 50px
 	height: 50px
-	border: 5px solid rgba(255, 255, 255, 0.3)
+	border: 5px solid var(--border-color)
 	border-top-color: white
 	border-radius: 50%
 	animation: spin 1s linear infinite
@@ -146,22 +156,12 @@ const login = async () => {
 	font-size: 24px
 	font-weight: 500
 
-.subblur
-	position: absolute
-	inset: 0
-	display: flex
-	justify-content: center
-	align-items: center
-	background: rgba(0, 0, 0, 0.4)
-	backdrop-filter: blur(5px)
-	z-index: 1000
-
 .image-block
 	display: flex
 	flex-direction: column
 	align-items: center
 	gap: 20px
-	color: rgb(210, 210, 210)
+	color: var(--color)
 
 	img:
 		width: 150px
@@ -185,52 +185,6 @@ const login = async () => {
 .error
 	border-bottom-color: rgb(153, 52, 52) !important
 	animation: shake 0.3s ease
-
-.input
-	border: 1px solid var(--border-color)
-	border-radius: 15px
-	font-size: 16px
-	padding-top: 15px
-	color: white
-	outline: none
-	transition: border-color 0.3s, transform 0.15s
-	position: relative
-
-	.placeholder
-		position: absolute
-		left: 10px
-		top: 50%
-		transform: translateY(-50%)
-		user-select: none
-		color: rgba(255, 255, 255, 0.5)
-		transition: transform 0.15s, font-size 0.15s, opacity 0.15s
-		pointer-events: none
-		z-index: 1
-
-	input
-		z-index: 2
-		font-size: 15px
-		padding: 10px 10px
-		width: 100%
-		border: none
-		background: none
-		color: inherit
-		outline: none
-
-	&:hover
-		border-color: rgba(255, 255, 255, 0.3)
-
-	&:focus-within
-		border-color: rgba(255, 255, 255, 0.3)
-		color: rgba(255, 255, 255, 0.9)
-		
-	&:focus-within .placeholder, &:has(input:not(:placeholder-shown)) .placeholder
-		transform: translateY(-120%)
-		font-size: 13px
-		opacity: 0.8
-
-	&.error 
-		border-color: rgb(170, 50, 50)
 
 .button-block 
 	display: flex

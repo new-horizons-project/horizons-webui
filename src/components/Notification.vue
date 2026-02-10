@@ -80,9 +80,9 @@ function handleClose() {
 	min-width: 300px
 	max-width: 400px
 	backdrop-filter: blur(12px)
-	background-color: rgba(35,35,35,0.35)
-	border: 1px solid rgba(255,255,255,0.15)
-	box-shadow: 0 8px 30px rgba(0,0,0,0.3)
+	background-color: var(--notification-background)
+	border: 1px solid var(--border-color)
+	box-shadow: 0 8px 30px var(--box-shadow)
 	transform: scale(0.9)
 	opacity: 0
 	transition: all 0.35s cubic-bezier(0.25,1,0.5,1)
@@ -116,12 +116,12 @@ h3
 	margin: 0
 	font-size: 16px
 	font-weight: 600
-	color: white
+	color: var(--color)
 
 p
 	margin: 0
 	font-size: 14px
-	color: #ddd
+	color: var(--color-dim)
 
 .progress-bar
 	height: 4px

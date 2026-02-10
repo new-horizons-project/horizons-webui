@@ -76,6 +76,8 @@ async function begin() {
 }
 
 onMounted(async () => {
+    document.documentElement.setAttribute('data-theme', "auto");
+    
     await begin();
 });
 

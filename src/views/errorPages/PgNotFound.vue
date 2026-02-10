@@ -3,7 +3,7 @@
 		<div class="text-block">
 			<h1>Ooops!</h1>
 			<p>The page you are looking for doesn't exist or has been moved</p>
-			<router-link to="/">Return Home</router-link>
+			<router-link class="button-style" to="/">Return Home</router-link>
 		</div>
 
 		<img src="/icons/404.png" alt="404" class="icon">
@@ -22,7 +22,7 @@
 
 	.text-block {
 		width: 65%;
-		color: white;
+		color: var(--color);
 	}
 
 	img {
@@ -36,20 +36,15 @@
 	}
 
 	p {
-		color: rgb(202, 202, 202);
+		color: var(--color-dim);
 		margin: 0 0 30px 0;
 		padding: 0;
 		font-weight: 500;
 	}
 
 	a {
-		width: max-content;
-		color: rgb(255, 255, 255);
-		background-color: rgb(49, 49, 49);
-		border-radius: 10px;
-		padding: 12px 15px;
-		display: flex;
 		text-decoration: none;
+		padding: 12px 15px;
 
 		img {
 			height: 25px;
@@ -57,19 +52,6 @@
 			display: inline-block;
 			transform-origin: center center;
 			transition: transform 400ms ease;
-		}
-
-		&:hover {
-        	background-color: rgb(60, 60, 60);
-		}
-
-		&:hover > img {
-			transform: rotate(90deg);
-		}
-
-		&:active {
-        	background-color: rgb(65, 65, 65);
-			transform: translateY(1px);
 		}
 	}
 }

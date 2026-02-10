@@ -2,8 +2,60 @@
 
 $themes: (
 	light: (
+		// Specials
+		icon-filter: 0.2,
+		icon-hover-filter: 0.3,
+		box-shadow: rgba(0, 0, 0, 0.025),
+
+		// Backgrounds
+		background-root: #f6f7f9,
+		background-color-main: #ffffff,
+		notification-background: #ffffff76,
+		background-color: #f8f8f8,
+		user-avatar-alter: rgb(190, 190, 190),
+		blur-background: rgba(255, 255, 255, 0.3),
+
+		// Borders
+		border-color: rgba(0, 0, 0, 0.3),
+		border-active-color: rgba(0, 0, 0, 0.4),
+		border-header-slider: rgba(0, 0, 0, 0.6),
+
+		// Buttons
+		btn-background-color: transparent,
+		btn-background-color-hover: rgba(0, 0, 0, 0.06),
+		btn-background-color-active: rgba(0, 0, 0, 0.12),
+
+		// Text
+		color: rgb(66, 66, 66),
+		color-dim: rgb(90, 90, 90)
 	),
 	dark: (
+		// Specials
+		icon-filter: 0.8,
+		icon-hover-filter: 0.7,
+		box-shadow: rgba(0, 0, 0, 0.3),
+
+		// Backgrounds
+		background-root: #1f1f1f,
+		background-color-main: #232323,
+		notification-background: #232323a4,
+		background-color: #2f2f2f,
+		user-avatar-alter: rgb(71, 71, 71),
+		blur-background: rgba(0, 0, 0, 0.3),
+
+		// Borders
+		border-color: rgba(255, 255, 255, 0.15),
+		border-active-color: rgba(255, 255, 255, 0.2),
+		border-header-slider: rgba(255, 255, 255, 1),
+
+		// Buttons
+		btn-background-color: transparent,
+		btn-background-color-hover: rgba(255, 255, 255, 0.1),
+		btn-background-color-active: rgba(255, 255, 255, 0.2),
+
+		// Text
+		color: rgb(250, 250, 250),
+		color-dim: rgb(180, 180, 180)
 	)
 );
 

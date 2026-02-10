@@ -2,7 +2,7 @@
 	<div class="header-wrapper" :class="{ pinned: scrolled }">
 		<div class="header block-style" :class="{ pinned: scrolled }">
 			<div class="logo">
-				<img :src="uiStore.imageUrl" alt="NH">
+				<img :src="uiStore.imageUrl + '?size=thumbnail'" alt="NH">
 			</div>
 
 			<nav class="links" ref="nav">
@@ -190,6 +190,7 @@ onUnmounted(() => {
 	margin: 10px;
 	user-select: none;
 	transition: padding 400ms, border-radius 400ms;
+	background-color: var(--background-color-main);
 
 	&.compact {
 		cursor: pointer;
@@ -239,7 +240,7 @@ onUnmounted(() => {
 			position: relative;
 			padding: 6px 2px;
 			text-decoration: none;
-			color: white;
+			color: var(--color);
 			font-weight: 500;
 		}
 	}
@@ -249,7 +250,7 @@ onUnmounted(() => {
 		bottom: 0;
 		height: 3px;
 		border-radius: 3px;
-		background: white;
+		background: var(--border-header-slider);
 		transition: transform 400ms cubic-bezier(.34,1.26,.64,1),
 					width 300ms ease,
 					opacity 300ms ease;
@@ -298,17 +299,17 @@ onUnmounted(() => {
 		}
 
 		&:hover {
-			color: rgb(205, 205, 205);
+			color: var(--color-dim);
 		}
 	}
 
 	.system-configuration {
-		color: rgb(220, 220, 220);
+		color: var(--color);
 		padding: 11px 10px;
 
 		img {
 			height: 25px;
-			filter: invert(1);
+			filter: invert(var(--icon-filter));
 			transform-origin: center center;
 			transition: transform 400ms ease, height 400ms;
 		}
@@ -364,7 +365,7 @@ onUnmounted(() => {
 
 a {
 	text-decoration: none;
-	color: white;
+	color: var(--color);
 }
 
 button {

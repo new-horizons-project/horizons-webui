@@ -50,6 +50,7 @@ Icons credentioals
 - <a href="https://www.flaticon.com/free-icons/home-page" title="home page icons">Home page icons created by Aldo Cervantes - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/account" title="account icons">Account icons created by SBTS2018 - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/calendar" title="calendar icons">Calendar icons created by Freepik - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/close" title="close icons">Close icons created by ariefstudio - Flaticon</a>
 
 ### Development Team
 

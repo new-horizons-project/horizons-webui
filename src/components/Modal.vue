@@ -84,13 +84,13 @@ defineExpose({ closeModal });
 	display: flex
 	justify-content: center
 	align-items: center
-	background: rgba(0, 0, 0, 0.4)
+	background: var(--blur-background)
 	backdrop-filter: blur(5px)
 	z-index: 1000
 
 .modal-background-block
-	background-color: rgba(29, 29, 29, 1)
-	border: 1px solid rgba(255, 255, 255, 0.05)
+	background-color: var(--background-color-main)
+	border: 1px solid var(--border-color)
 	border-radius: 15px
 	display: flex
 	flex-direction: column
@@ -100,13 +100,11 @@ defineExpose({ closeModal });
 	width: auto
 	height: auto
 	transition: width 0.3s, height 0.3s, padding 0.3s
+	box-shadow: 0 4px 10px var(--box-shadow)
 
 .slot-wrapper
-	overflow: scroll
 	display: flex
 	flex-direction: column
-	align-items: center
-	justify-content: center
 	width: 100%
 	height: 100%
 	gap: 20px

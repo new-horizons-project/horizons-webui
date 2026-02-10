@@ -54,7 +54,7 @@
 	}
 
 	.block-name {
-		color: grey;
+		color: var(--color-dim);
 		font-size: 12px;
 	}
 
@@ -117,7 +117,7 @@
 
 			a {
 				padding: 1px 10px;
-				color: white;
+				color: var(--color);
 				text-decoration: none;
 			}
 

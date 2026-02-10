@@ -166,12 +166,12 @@ watch(() => uiStore.displayLoginForm, (newVal, oldVal) => {
 				right: 5px;
 				position: absolute;
 				padding: 3px 6px;
-				border-radius: 50px;
+				border-radius: 10px;
 				font-size: 12px;
 				font-weight: 500;
-				color: white;
-				background: rgba(255, 255, 255, 0.08);
-				border: 1px solid rgba(255, 255, 255, 0.4);
+				color: var(--color);
+				background: var(--background-color-main);
+				border: 1px solid var(--border-color);
 
 				&.administrator {
 					border-color: rgb(67, 230, 126);
