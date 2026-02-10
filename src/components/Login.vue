@@ -5,8 +5,12 @@
 		<img :src="uiStore.imageUrl + '?size=medium'" width="150" alt="">
 
 		<div class="loading-screen" v-if="loadingScreen">
-			<div class="loading-circle"></div>
+			<div class="loading-circle" v-if="!criticalError"></div>
+			<div class="loading-err" v-else>
+				<img src="/icons/close.png" class="icon" width="50" height="50" alt="">
+			</div>
 			<div class="loading-text">{{ loadingText }}</div>
+			<button v-if="criticalError" style="margin-top: 30px; padding: 15px 30px;" class="button-style" @click="cancel">Close</button>
 		</div>
 
 		<div v-else class="login-form">
@@ -44,6 +48,7 @@ const uiStore = useUiStore();
 const { t } = useI18n();
 
 const loadingScreen = ref(false);
+const criticalError = ref(false);
 const userMustChangePassword = ref(false);
 const loadingText = ref<string>('Trying to log in...')
 const modalRef = ref<InstanceType<typeof Modal> | null>(null);
@@ -103,9 +108,20 @@ const login = async () => {
         }
 
         if (err.status === 403) {
-            loadingText.value = 'You must change your password on first login.';
-            userMustChangePassword.value = true;
-            return;
+			if (err.response?.data?.detail == "USER_MUST_CHANGE_PASSWORD") {
+				loadingText.value = 'You must change your password on first login.';
+				userMustChangePassword.value = true;
+				return;
+			}
+
+			criticalError.value = true;
+
+			if (err.response?.data?.detail == "USER_UNAVAILABLE") {
+				loadingText.value = 'Unable to load user details.';
+				return;
+			}
+
+			loadingText.value = 'Unknnown error, contact administrator';
         }
 
         loadingText.value = 'An error occurred. Try reloading page.';
@@ -140,7 +156,7 @@ const login = async () => {
 	gap: 20px
 	justify-content: center
 	align-items: center
-	color: white
+	color: var(--color)
 	font-size: 18px
 	margin-top: 50px
 
@@ -190,11 +206,11 @@ const login = async () => {
 	display: flex
 	gap: 10px
 
-	button
-		padding: 10px 24px
-		cursor: pointer
-		font-size: 16px
-		font-weight: 500
+button
+	padding: 10px 24px
+	cursor: pointer
+	font-size: 16px
+	font-weight: 500
 
 @media (max-width: 1000px)
 	.form-background-block
