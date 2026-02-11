@@ -1,78 +1,96 @@
 <template>
-	<div v-if="uiStore.displayLoginForm">
-		<Login @close="closeLogin" />
+	<div class="wrapper" v-if="appReady">
+		<DynamicHeader />
+		<router-view />
 	</div>
-	<div v-if="showNotification">
-		<Notification :header="`Welcome, ${ authStore.username }!`" src="http://127.0.0.1:8000/static/1?size=thumbnail"
-			message="You have successfully logged in." type="success" @close="closeNotification"/>
-	</div>
-
-	<router-view v-if="authStore.isLoggedIn"/>
-	<Loading v-else-if="!uiStore.showLoadingBlocked" :substr="reconnectMessageSubstr" />
+    <Loading v-if="!uiStore.apiConnecitonChecked" :message="t('loading.connection.messages.header')" :substr="reconnectMessageSubstr"/>
+    <NotificationController />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useAuthStore } from './storage/auth';
 import { useUiStore } from './storage/ui';
-import { reloadToken, loadUser } from './api/user';
-import Login from './components/Login.vue';
+import { reloadToken, User } from './api/user';
+import { useI18n } from 'vue-i18n';
+import { ping } from './api/app';
+
+import DynamicHeader from './components/DynamicHeader.vue';
 import Loading from './components/Loading.vue';
-import Notification from './components/Notification.vue';
+import NotificationController from './components/NotificationController.vue';
+// import { notificationController } from './scripts/notificationController';
 
 const authStore = useAuthStore();
 const uiStore = useUiStore();
-
+const { t } = useI18n();
 const reconnectMessageSubstr = ref<string>("");
+
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function loginAttempt() {
-	for (let i = 0; i < 5; i++) {
-		reconnectMessageSubstr.value = `Attempt: ${i + 1} of 5`;
-		console.log(`Attempt ${i + 1}`);
+const appReady = ref<boolean>(false);
 
-		try {
-			const res = await reloadToken();
-			if (res.status === 200) {
-				authStore.token = res.data.access_token;
-				const user = await loadUser();
-				authStore.setLogin(user.username);
-				break;
-			}
-		} catch (err: any) {
-			if (err.status === 401) {
-				uiStore.showLoginForm();
-				break;
-			}
+async function testApi() {
+    for (let i = 0; i < 5; i++) {
+        reconnectMessageSubstr.value = t('loading.connection.messages.substring.1', { attempt: i + 1, attempts: 5 });
 
-			console.log(err);
-			await sleep(5000);
-		}
-	}
+        try {
+            const res = await ping();
+            if (res.status === 200) {
+                uiStore.apiConnecitonChecked = true;
+                return true;
+            }
+        } catch {
+            await sleep(5000);
+        }
+    }
 
-	reconnectMessageSubstr.value = "Reload the page to retry connection";
+    reconnectMessageSubstr.value = t('loading.connection.messages.substring.2');
+    return false;
 }
 
-if (!authStore.isLoggedIn) {
-	(async () => {
-		await loginAttempt();
-	})();
+async function restoreUser() {
+    try {
+        const res = await reloadToken();
+        if (res.status === 200) {
+            authStore.token = res.data.access_token;
+			authStore.user = await User.create();
+			authStore.isLoggedIn = true;
+        }
+    } catch (err: any) {
+        if (err.status === 401) {
+			return;
+        }
+        console.log(err);
+    }
 }
 
+async function begin() {
+    const apiConnected = await testApi();
+    if (!apiConnected) return false;
 
-const showNotification = ref(false);
+    if (!authStore.isLoggedIn) {
+        await restoreUser();
+    }
 
-const closeLogin = () => {
-	uiStore.hideLoginForm();
-	showNotification.value = true;
-};
-
-const closeNotification = () => {
-	showNotification.value = false;
+	appReady.value = true;
 }
+
+onMounted(async () => {
+    document.documentElement.setAttribute('data-theme', "auto");
+    
+    await begin();
+});
 
 </script>
 
-<style scoped>
+<style lang="scss">
+
+#app .wrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
 
 </style>

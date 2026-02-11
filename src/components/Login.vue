@@ -1,69 +1,165 @@
 <template>
-	<Modal ref="modalRef" :width=55 :height=450 measure-width="%" measure-height="px"
-	padding-set="35px" opacity-speed="0.2s" :max-width="700">
-		<img src="http://127.0.0.1:8000/static/1?size=small" width="150" alt="">
-
-		<div class="loading-screen" v-if="loadingScreen">
-			<div class="loading-circle"></div>
-			<div class="loading-text">{{ loadingText }}</div>
+	<Modal ref="modalRef" :width=600 :height=600 measure-width="px" measure-height="px"
+	padding-set="0" opacity-speed="0.2s">
+	<div class="modal-wrapper">
+		<div class="header">
+			<h2>Login</h2>
+			<button class="close" @click="cancel">
+				<img src="/icons/close.png" class="icon">
+			</button>
 		</div>
 
-		<div v-else class="login-form">
-			<div class="image-block">
-				<div class="text">
-					New Horizons Project
+		<div class="main-wrapper">
+			<img :src="uiStore.imageUrl + '?size=medium'" width="150" alt="">
+
+			<div class="loading-screen" v-if="loadingScreen">
+				<div class="loading-circle" v-if="!criticalError"></div>
+				<div class="loading-err" v-else-if="criticalError">
+					<img src="/icons/close.png" class="icon" width="50" height="50" alt="">
+				</div>
+				<div class="loading-text">{{ loadingText }}</div>
+				<button v-if="criticalError" style="margin-top: 30px; padding: 15px 30px;" class="button-style" @click="cancel">Close</button>
+			</div>
+
+			<div v-else class="login-form">
+				<div class="image-block">
+					<div class="text">
+						{{ currentText }}
+					</div>
+				</div>
+
+				<div class="input-block">
+					<InputSingle type="text" v-model="username" ref="userInputRef" :small="false" :text='t("modal.login.inputs.username")' />
+					<InputSingle type="password" v-model="password" ref="passInputRef" :small="false" :text='t("modal.login.inputs.password")' />
+					<InputSingle ref="newPass1InputRef" v-if="userMustChangePassword" type="password" v-model="newPass1" :small="false" text='New Password' />
+					<InputSingle ref="newPass2InputRef" v-if="userMustChangePassword" type="password" v-model="newPass2" :small="false" text='Retype New Password' />
+				</div>
+
+				<div class="button-block">
+					<button class="button-style" @click="login">{{ t('modal.login.buttons.login') }}</button>
 				</div>
 			</div>
-
-			<div class="input-block" v-if="!userMustChangePassword">
-				<input type="text" :class="{ error: usernameErr }" @focus="usernameErr = false"
-					ref="usernameInput" v-model="username" placeholder="Username" />
-				<input type="password" :class="{ error: passwordErr }" @focus="passwordErr = false"
-					ref="passwordInput" v-model="password" placeholder="Password" />
-			</div>
-
-			<button @click="login">Login</button>
 		</div>
+	</div>
 	</Modal>
 </template>
 
 <script lang="ts" setup>
 import Modal from './Modal.vue';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { useAuthStore } from '../storage/auth';
-import { loginUser } from '../api/user';
+import { loginUser, User, changePassword } from '../api/user';
+import { useI18n } from 'vue-i18n';
+import { useUiStore } from '../storage/ui';
+import InputSingle from './InputSingle.vue';
 
 const authStore = useAuthStore();
+const uiStore = useUiStore();
+const { t } = useI18n();
 
 const loadingScreen = ref(false);
+const criticalError = ref(false);
 const userMustChangePassword = ref(false);
-const username = ref<string>('')  
-const password = ref<string>('')
-const loadingText = ref<string>('Trying to log in...')
-
-const usernameErr = ref<boolean>(false);
-const passwordErr = ref<boolean>(false);
-const usernameInput = ref<HTMLInputElement | null>(null);
-const passwordInput = ref<HTMLInputElement | null>(null);
+const loadingText = ref<string>('Trying to log in...');
+const currentText = ref<string>('Local Account');
+const modalRef = ref<InstanceType<typeof Modal> | null>(null);
 
 const emit = defineEmits(['close']);
 
-const modalRef = ref<InstanceType<typeof Modal> | null>(null);
+const userInputRef = ref<InstanceType<typeof InputSingle> | null>(null);
+const passInputRef = ref<InstanceType<typeof InputSingle> | null>(null);
+const newPass1InputRef = ref<InstanceType<typeof InputSingle> | null>(null);
+const newPass2InputRef = ref<InstanceType<typeof InputSingle> | null>(null);
+const username = ref<string>('');
+const password = ref<string>('');
+const newPass1 = ref<string>('');
+const newPass2 = ref<string>('');
 
-const login = async () => {
-    let err = false;
+async function cancel() {
+	await modalRef.value?.closeModal();
+
+	emit('close');
+}
+
+const checkValues = () => {
+	let err = false;
 
     if (username.value === '') {
         err = true;
-        usernameErr.value = true;
+        userInputRef.value?.setError(true);
     }
 
     if (password.value === '') {
         err = true;
-        passwordErr.value = true;
+        passInputRef.value?.setError(true);
     }
 
-    if (err) return;
+	if (userMustChangePassword.value) {
+		if (newPass1.value === '') {
+			err = true;
+			newPass1InputRef.value?.setError(true);
+		}
+
+		if (newPass2.value === '') {
+			newPass2InputRef.value?.setError(true);
+			err = true;
+		}
+
+		if (newPass2.value !== newPass1.value) {
+			newPass2InputRef.value?.setError(true);
+			err = true;
+		}
+	}
+
+    return err;
+}
+
+
+// Rework!!!
+const runChangePassword = async () => {
+	loadingScreen.value = true;
+	loadingText.value = "Changing password..."
+	
+	try {
+		const res = await changePassword(username.value, password.value, newPass1.value);
+
+		if (res.status === 200) {
+			password.value = newPass1.value;
+			return true;
+        }
+	} catch (err: any) {
+        if (err.status === 400 || err.status === 401 || err.status === 404) {
+            loadingScreen.value = false;
+
+			await nextTick();
+
+			userInputRef.value?.setError(true);
+			passInputRef.value?.setError(true);
+			newPass1InputRef.value?.setError(true);
+			newPass2InputRef.value?.setError(true);
+            return false;
+        }
+
+		if (err.status === 422 || err.status === 405) {
+			criticalError.value = true;
+			loadingText.value = "Critical error, contact administrator"
+			return false;
+		}
+	}
+}
+
+const login = async () => {
+	if (checkValues()) {
+		return;
+	}
+
+	if (userMustChangePassword.value) {
+		const res = await runChangePassword();
+
+		if (!res) {
+			return;
+		}
+	}
 
     loadingScreen.value = true;
 
@@ -73,7 +169,8 @@ const login = async () => {
         if (res.status === 200) {
             loadingText.value = 'Setting up credentials...';
             authStore.token = res.data.access_token;
-            authStore.setLogin(username.value);
+			authStore.user = await User.create();
+			authStore.isLoggedIn = true;
 
             await modalRef.value?.closeModal();
 
@@ -82,46 +179,104 @@ const login = async () => {
     } catch (err: any) {
         if (err.status === 400 || err.status === 401 || err.status === 404) {
             loadingScreen.value = false;
-            passwordErr.value = true;
-            usernameErr.value = true;
+			await nextTick();
+			userInputRef.value?.setError(true);
+			passInputRef.value?.setError(true);
             return;
         }
 
         if (err.status === 403) {
-            loadingText.value = 'You must change your password on first login.';
-            userMustChangePassword.value = true;
-            return;
-        }
+			if (err.response?.data?.detail == "USER_MUST_CHANGE_PASSWORD") {
+				currentText.value = 'You must change your password';
+				userMustChangePassword.value = true;
+				loadingScreen.value = false;
+				return;
+			}
 
-        loadingText.value = 'An error occurred. Try reloading page.';
+			criticalError.value = true;
+
+			if (err.response?.data?.detail == "USER_UNAVAILABLE") {
+				loadingText.value = 'Unable to load user details.';
+				return;
+			}
+
+			loadingText.value = 'Unknnown error, contact administrator';
+        }
         console.error(err);
     }
 };
 </script>
 
 <style lang="sass" scoped>
+.modal-wrapper
+	flex: 1 1 auto
+	display: flex
+	flex-direction: column
+	height: 100%
+
+	.main-wrapper
+		padding: 15px
+		flex: 1 1 auto
+		height: 100%
+		overflow: auto
+		width: 100%
+		box-sizing: border-box
+		display: flex
+		flex-direction: column
+		justify-content: center
+		align-items: center
+		gap: 20px
+
+	.header
+		display: flex
+		justify-content: space-between
+		padding: 2px 20px
+		background-color: var(--background-root)
+		border-bottom: 1px solid var(--border-color)
+		
+		.close
+			display: flex
+			align-items: center
+			cursor: pointer
+			background: none
+			border: none
+			height: 20px
+			width: 20px
+
+			img
+				width: 20px
+				height: 20px
+				transition: transform 200ms, filter 200ms
+
+				&:hover
+					transform: rotate(90deg)
+
+				&:active
+					filter: invert(var(--icon-hover-filter))
+
 .login-form
 	width: 100%
 	display: flex
 	flex-direction: column
+	justify-content: space-around
 	align-items: center
-	gap: 10px
+	gap: 20px
 
 .loading-screen
 	inset: 0
 	display: flex
 	flex-direction: column
-	gap: 100px
+	gap: 20px
 	justify-content: center
 	align-items: center
-	color: white
+	color: var(--color)
 	font-size: 18px
 	margin-top: 50px
 
 .loading-circle
 	width: 50px
 	height: 50px
-	border: 5px solid rgba(255, 255, 255, 0.3)
+	border: 5px solid var(--border-color)
 	border-top-color: white
 	border-radius: 50%
 	animation: spin 1s linear infinite
@@ -130,85 +285,45 @@ const login = async () => {
 	font-size: 24px
 	font-weight: 500
 
-.subblur
-	position: absolute
-	inset: 0
-	display: flex
-	justify-content: center
-	align-items: center
-	background: rgba(0, 0, 0, 0.4)
-	backdrop-filter: blur(5px)
-	z-index: 1000
-
 .image-block
 	display: flex
 	flex-direction: column
 	align-items: center
 	gap: 20px
-	color: rgb(210, 210, 210)
+	color: var(--color)
 
-		img:
-			width: 150px
-			height: auto
-			object-fit: contain
-			opacity: 0
-			transform: scale(0.95)
-			animation: imageAppear 0.8s ease forwards 0.2s
+	img:
+		width: 150px
+		height: auto
+		object-fit: contain
+		opacity: 0
+		transform: scale(0.95)
+		animation: imageAppear 0.8s ease forwards 0.2s
 
 .text
 	font-size: 28px
 	font-weight: 600
+	text-align: center
 
 .input-block
-	width: 80%
+	width: 100%
 	display: flex
 	flex-direction: column
-	gap: 25px
-	margin-top: 10px
+	gap: 15px
 
 .error
 	border-bottom-color: rgb(153, 52, 52) !important
 	animation: shake 0.3s ease
 
-input
-	background: transparent
-	border: none
-	border-bottom: 2px solid rgba(255, 255, 255, 0.3)
-	padding: 10px
-	font-size: 16px
-	color: white
-	outline: none
-	transition: border-color 0.3s, transform 0.15s
-
-	&:hover
-		border-bottom-color: rgba(255, 255, 255, 0.5)
-
-	&:focus
-		border-bottom-color: white
-		transform: scale(1.02)
-
-	&::placeholder
-		color: rgba(255, 255, 255, 0.5)
+.button-block 
+	display: flex
+	gap: 10px
 
 button
-	margin-top: 30px
-	padding: 8px 24px
-	background: transparent
-	border: 2px solid rgba(255, 255, 255, 0.3)
-	border-radius: 5px
-	color: white
-	font-size: 16px
+	padding: 10px 24px
 	cursor: pointer
-	transition: border-color 0.2s, transform 0.15s, color 0.2s, background-color 0.2s
-
-	&:hover
-		border-color: white
-		background-color: rgba(255, 255, 255, 0.109)
-		transform: translateY(-2px)
-
-	&:active
-		transform: translateY(1px)
-		color: rgb(200, 200, 200)
+	font-size: 16px
+	font-weight: 500
 
 @media (max-width: 1000px)
 	.form-background-block

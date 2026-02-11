@@ -5,10 +5,8 @@
 	</div>
 
 	<div class="message" :class="{ showMessage }">
-	  	Seems like we have a problem with connecting to the API<br>Contact administrator
-		<div class="substring">
-			{{ substr }}
-		</div>
+		<div v-html="message"></div>
+		<div class="substring">{{ substr }}</div>
 	</div>
   </div>
 </template>
@@ -18,6 +16,7 @@ import { ref } from 'vue';
 
 defineProps<{
   substr: string;
+  message: string;
 }>();
 
 const showMessage = ref(false);

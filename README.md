@@ -40,6 +40,18 @@ This project uses following open-source libraries/plugins/frameworks:
 
 Special thanks to the authors and maintainers of these libraries for their contributions to the open-source community.
 
+Icons credentioals
+
+- <a href="https://www.flaticon.com/free-icons/custom" title="custom icons">Custom icons created by monkik - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/login" title="login icons">Login icons created by Pixel perfect - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/settings" title="settings icons">Settings icons created by Freepik - Flaticon</a>
+- <a href="https://www.flaticon.com/ru/free-icons/-404" title="error 404 icons">Error 404 icons created by Freepik - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/home-page" title="home page icons">Home page icons created by Aldo Cervantes - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/account" title="account icons">Account icons created by SBTS2018 - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/calendar" title="calendar icons">Calendar icons created by Freepik - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/close" title="close icons">Close icons created by ariefstudio - Flaticon</a>
+
 ### Development Team
 
 | Role                     | Contributor |
