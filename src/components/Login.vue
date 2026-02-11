@@ -1,12 +1,12 @@
 <template>
-	<Modal ref="modalRef" :width=600 :height=700 measure-width="px" measure-height="px"
+	<Modal ref="modalRef" :width=600 :height=600 measure-width="px" measure-height="px"
 	padding-set="15px" opacity-speed="0.2s">
 	<div class="modal-wrapper">
 		<img :src="uiStore.imageUrl + '?size=medium'" width="150" alt="">
 
 		<div class="loading-screen" v-if="loadingScreen">
 			<div class="loading-circle" v-if="!criticalError"></div>
-			<div class="loading-err" v-else>
+			<div class="loading-err" v-else-if="criticalError">
 				<img src="/icons/close.png" class="icon" width="50" height="50" alt="">
 			</div>
 			<div class="loading-text">{{ loadingText }}</div>
@@ -16,13 +16,15 @@
 		<div v-else class="login-form">
 			<div class="image-block">
 				<div class="text">
-					Login with local account
+					{{ currentText }}
 				</div>
 			</div>
 
-			<div class="input-block" v-if="!userMustChangePassword">
-				<InputSingle type="text" v-model="username" ref="userInputRef" :text='t("modal.login.inputs.username")' />
-				<InputSingle type="password" v-model="password" ref="passInputRef" :text='t("modal.login.inputs.password")' />
+			<div class="input-block">
+				<InputSingle type="text" v-model="username" ref="userInputRef" :small="false" :text='t("modal.login.inputs.username")' />
+				<InputSingle type="password" v-model="password" ref="passInputRef" :small="false" :text='t("modal.login.inputs.password")' />
+				<InputSingle ref="newPass1InputRef" v-if="userMustChangePassword" type="password" v-model="newPass1" :small="false" text='New Password' />
+				<InputSingle ref="newPass2InputRef" v-if="userMustChangePassword" type="password" v-model="newPass2" :small="false" text='Retype New Password' />
 			</div>
 
 			<div class="button-block">
@@ -38,7 +40,7 @@
 import Modal from './Modal.vue';
 import { ref } from 'vue';
 import { useAuthStore } from '../storage/auth';
-import { loginUser, User } from '../api/user';
+import { loginUser, User, changePassword } from '../api/user';
 import { useI18n } from 'vue-i18n';
 import { useUiStore } from '../storage/ui';
 import InputSingle from './InputSingle.vue';
@@ -50,18 +52,20 @@ const { t } = useI18n();
 const loadingScreen = ref(false);
 const criticalError = ref(false);
 const userMustChangePassword = ref(false);
-const loadingText = ref<string>('Trying to log in...')
+const loadingText = ref<string>('Trying to log in...');
+const currentText = ref<string>('Login with local account');
 const modalRef = ref<InstanceType<typeof Modal> | null>(null);
-
-const usernameErr = ref<boolean>(false);
-const passwordErr = ref<boolean>(false);
 
 const emit = defineEmits(['close']);
 
 const userInputRef = ref<InstanceType<typeof InputSingle> | null>(null);
 const passInputRef = ref<InstanceType<typeof InputSingle> | null>(null);
+const newPass1InputRef = ref<InstanceType<typeof InputSingle> | null>(null);
+const newPass2InputRef = ref<InstanceType<typeof InputSingle> | null>(null);
 const username = ref<string>('');
 const password = ref<string>('');
+const newPass1 = ref<string>('');
+const newPass2 = ref<string>('');
 
 async function cancel() {
 	await modalRef.value?.closeModal();
@@ -69,8 +73,8 @@ async function cancel() {
 	emit('close');
 }
 
-const login = async () => {
-    let err = false;
+const checkValues = () => {
+	let err = false;
 
     if (username.value === '') {
         err = true;
@@ -82,7 +86,69 @@ const login = async () => {
         passInputRef.value?.setError(true);
     }
 
-    if (err) return;
+	if (userMustChangePassword.value) {
+		if (newPass1.value === '') {
+			err = true;
+			newPass1InputRef.value?.setError(true);
+		}
+
+		if (newPass2.value === '') {
+			newPass2InputRef.value?.setError(true);
+			err = true;
+		}
+
+		if (newPass2.value !== newPass1.value) {
+			newPass2InputRef.value?.setError(true);
+			err = true;
+		}
+	}
+
+    return err;
+}
+
+
+// Rework!!!
+const runChangePassword = async () => {
+	loadingScreen.value = true;
+	loadingText.value = "Changing password..."
+	
+	try {
+		const res = await changePassword(username.value, password.value, newPass1.value);
+
+		if (res.status === 200) {
+			password.value = newPass1.value;
+			return true;
+        }
+	} catch (err: any) {
+        if (err.status === 400 || err.status === 401 || err.status === 404) {
+            loadingScreen.value = false;
+            return false;
+        }
+
+		if (err.status === 422 || err.status === 405) {
+			criticalError.value = true;
+			loadingText.value = "Critical error, contact administrator"
+			return false;
+		}
+	}
+}
+
+const login = async () => {
+	if (checkValues()) {
+		return;
+	}
+
+	if (userMustChangePassword.value) {
+		const res = await runChangePassword();
+
+		if (!res) {
+			userInputRef.value?.setError(true);
+			passInputRef.value?.setError(true);
+			newPass1InputRef.value?.setError(true);
+			newPass2InputRef.value?.setError(true);
+			return;
+		}
+	}
 
     loadingScreen.value = true;
 
@@ -102,15 +168,16 @@ const login = async () => {
     } catch (err: any) {
         if (err.status === 400 || err.status === 401 || err.status === 404) {
             loadingScreen.value = false;
-            passwordErr.value = true;
-            usernameErr.value = true;
+			userInputRef.value?.setError(true);
+			passInputRef.value?.setError(true);
             return;
         }
 
         if (err.status === 403) {
 			if (err.response?.data?.detail == "USER_MUST_CHANGE_PASSWORD") {
-				loadingText.value = 'You must change your password on first login.';
+				currentText.value = 'You must change your password';
 				userMustChangePassword.value = true;
+				loadingScreen.value = false;
 				return;
 			}
 
@@ -133,6 +200,7 @@ const login = async () => {
 <style lang="sass" scoped>
 .modal-wrapper
 	overflow: hidden
+	flex: 1 1 auto
 	width: 100%
 	height: 100%
 	display: flex

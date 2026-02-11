@@ -1,7 +1,7 @@
 <template>
-	<div class="input" :class="{ error: vErr, small: small }">
+	<div class="input" :class="{ error: vErr }">
 		<div class="placeholder">{{ text }}</div>
-		<input :type="type" placeholder=" " @focus="vErr = false" v-model="value" />
+		<textarea :type="type" placeholder=" " @focus="vErr = false" v-model="value" />
 	</div>
 </template>
 
@@ -11,17 +11,11 @@ import { computed, ref } from 'vue'
 
 const vErr = ref(false);
 
-const props = withDefaults(
-	defineProps<{
-		text: string,
-		type: string,
-		small: boolean,
-		modelValue?: string
-	}>(),
-	{
-		small: false
-	}
-);
+const props = defineProps<{
+	text: string,
+	type: string,
+	modelValue?: string
+}>();
 
 const emit = defineEmits<{
 	(e: 'update:modelValue', v: string): void
@@ -45,7 +39,8 @@ defineExpose({ setError });
 	width: 100%
 	border: 1px solid var(--border-color)
 	border-radius: 15px
-	padding-top: 15px
+	padding-top: 25px
+	border-bottom-right-radius: 0
 	color: var(--color)
 	outline: none
 	transition: border-color 0.3s, transform 0.15s
@@ -53,50 +48,40 @@ defineExpose({ setError });
 
 	.placeholder
 		position: absolute
-		left: 10px
-		top: 50%
+		left: -1px
+		top: 12px
+		font-size: 14px
+		padding: 2px 9px
+		border: 1px solid var(--border-color)
+		border-radius: 10px
+		background-color: var(--background-color-main)
 		transform: translateY(-50%)
 		user-select: none
 		color: var(--color)
-		transition: transform 0.15s, font-size 0.15s, opacity 0.15s
 		pointer-events: none
+		transition: border-color 0.3s, transform 0.15s
 		z-index: 1
+		border-top-right-radius: 0
+		border-bottom-left-radius: 0
 
-	input
+	textarea
 		z-index: 2
+		width: 100%
+		max-width: 100%
+		min-width: 100%
 		font-size: 15px
-		padding: 10px 10px
-		width: 97%
+		padding: 10px
+		box-sizing: border-box
 		background: none
 		border: none
 		color: inherit
 		outline: none
 
-	&.small
-		input
-			padding: 5px 10px
-			font-size: 14px
-
-		.placeholder
-			font-size: 14px
-
-		&:focus-within .placeholder, &:has(input:not(:placeholder-shown)) .placeholder
-			transform: translateY(-110%)
-			font-size: 12px
-			opacity: 0.8
-		
-
 	&:hover
 		border-color: var(--border-active-color)
 
-	&:focus-within
+	&:focus-within, &:focus-within .placeholder
 		border-color: var(--border-active-color)
-		color: var(--color-dim)
-		
-	&:focus-within .placeholder, &:has(input:not(:placeholder-shown)) .placeholder
-		transform: translateY(-120%)
-		font-size: 13px
-		opacity: 0.8
 
 	&.error 
 		border-color: rgb(170, 50, 50)

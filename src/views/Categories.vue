@@ -14,7 +14,7 @@
 				</router-link>
 			</div>
 			<hr>
-			<button class="button-style" @click="openModal"><span style="font-size: 14px;">Add Category</span> +</button>
+			<button class="button-style" v-if="canCreateCateg()" @click="openModal"><span style="font-size: 14px;">Add Category</span> +</button>
 		</div>
 		<router-view />
 		<Modal ref="modalRef" v-if="showCreateCategory" :width=30 :height=40 measure-width="%" measure-height="%"
@@ -26,6 +26,14 @@
 						<img src="/icons/close.png" class="icon">
 					</button>
 				</div>
+				<div class="input-wrapper">
+					<div class="input">
+						<InputSingle :small="true" type="text" text="Category title" v-model="title" />
+					</div>
+					<div class="input">
+						<Textarea :small="true" type="text" text="Description" v-model="desc" />
+					</div>
+				</div>
 			</div>
 		</Modal>
 	</div>
@@ -34,15 +42,26 @@
 <script lang="ts" setup>
 
 import Modal from '../components/Modal.vue';
+import InputSingle from '../components/InputSingle.vue';
+import Textarea from '../components/Textarea.vue';
+import { useAuthStore } from '../storage/auth';
 import { ref } from 'vue';
 
 let currentPath: Record<string, string>[];
+let title = ref<string>('');
+let desc = ref<string>('');
 
+const authStore = useAuthStore();
 const showCreateCategory = ref(false);
 const modalRef = ref<InstanceType<typeof Modal> | null>(null);
 
 function openModal() {
 	showCreateCategory.value = true;
+}
+
+function canCreateCateg() {
+	const role = authStore.user?.role
+	return role !== undefined && ["admin", "moderator"].includes(role)
 }
 
 async function closeModal() {
@@ -119,12 +138,12 @@ async function closeModal() {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 2px 10px;
+		padding: 2px 20px;
 		border-bottom: 1px solid var(--border-color);
 		
 		.close {
 			cursor: pointer;
-			margin-right: 5px;
+			margin-right: 0px;
 			background: none;
 			border: none;
 			height: 20px;
@@ -149,6 +168,18 @@ async function closeModal() {
 			padding: 0;
 			margin: 0;
 			padding: 5px 0;
+		}
+	}
+
+	.input-wrapper {
+		display: flex;
+		flex-direction: column;
+		padding: 15px;
+		align-items: center;
+		gap: 15px;
+
+		.input {
+			width: 100%;
 		}
 	}
 }

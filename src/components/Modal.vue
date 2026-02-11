@@ -1,20 +1,15 @@
 <template>
-    <div class="subblur">
+    <div class="subblur" :style="{ opacity: opacitySet, transition: 'opacity 0.3s ease' }">
         <div
             class="modal-background-block"
             :style="{
-                width: animatedWidth + measureWidth,
-                height: animatedHeight + measureHeight,
-                maxWidth: maxWidth + measureMaxWidth,
-                maxHeight: maxHeight + measureMaxHeight,
-                padding: localPadding
+                minWidth: width + measureWidth,
+                minHeight: height + measureHeight,
+                padding: localPadding,
             }"
         >
-            <div
-                class="slot-wrapper"
-                :style="{ opacity: opacitySet, transition: 'opacity 0.3s ease' }"
-            >
-                <slot></slot>
+            <div class="slot-wrapper">
+                <slot />
             </div>
         </div>
     </div>
@@ -27,48 +22,26 @@ const props = withDefaults(
 	defineProps<{
 		measureHeight: 'px' | '%';
 		measureWidth: 'px' | '%';
-		measureMaxHeight?: 'px' | '%';
-		measureMaxWidth?: 'px' | '%';
 		width: number;
 		height: number;
-		maxWidth?: number;
-		maxHeight?: number;
 		paddingSet?: string;
 	}>(),
 	{
 		paddingSet: '20px',
-		maxWidth: 800,
-		maxHeight: 600,
-		measureMaxHeight: 'px',
-		measureMaxWidth: 'px'
 	}
 );
 
 const localPadding = ref(props.paddingSet);
-const animatedWidth = ref(0);
-const animatedHeight = ref(0);
 const opacitySet = ref(0);
 
 onMounted(() => {
 	setTimeout(() => {
-		animatedWidth.value = props.width;
-		animatedHeight.value = props.height;
-	}, 50);
-
-	setTimeout(() => {
 		opacitySet.value = 1;
-	}, 450);
+	}, 10);
 });
 
 const closeModal = async () => {
 	opacitySet.value = 0;
-
-	await new Promise(resolve => setTimeout(resolve, 300));
-
-	localPadding.value = "0";
-	animatedWidth.value = 0;
-	animatedHeight.value = 0;
-
 	await new Promise(resolve => setTimeout(resolve, 300));
 };
 
@@ -83,6 +56,8 @@ defineExpose({ closeModal });
 	inset: 0
 	display: flex
 	justify-content: center
+	width: auto
+	height: auto
 	align-items: center
 	background: var(--blur-background)
 	backdrop-filter: blur(5px)
@@ -99,14 +74,18 @@ defineExpose({ closeModal });
 	gap: 20px
 	width: auto
 	height: auto
-	transition: width 0.3s, height 0.3s, padding 0.3s
+	max-height: calc(100dvh - 40px)
+	max-width: calc(100dvw - 40px)
+	overflow: hidden
+	transition: max-width 0.3s ease, max-height 0.3s ease, padding 0.3s ease
+	box-sizing: border-box
 	box-shadow: 0 4px 10px var(--box-shadow)
 
 .slot-wrapper
 	display: flex
+	flex: 1 1 auto
 	flex-direction: column
 	width: 100%
-	height: 100%
 	gap: 20px
 
 @media (max-width: 800px)

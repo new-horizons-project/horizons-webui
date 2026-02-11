@@ -59,6 +59,26 @@ export async function loginUser(username: string, password: string) {
 	return res;
 }
 
+export async function changePassword(username: string, password: string, newPassword: string) {
+	const res = await api.patch('/user/reset_password',
+		{
+			old_password: password,
+			new_password: newPassword
+		},
+		{
+			params: {
+				username
+			},
+			headers: { 
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+		},
+	);
+
+	return res;
+}
+
 export async function reloadToken() {
 	const res = await refresh.post("/auth/renew_access", {}, { withCredentials: true });
 	return res;
