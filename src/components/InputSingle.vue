@@ -48,6 +48,7 @@ defineExpose({ setError });
 	padding-top: 15px
 	color: var(--color)
 	outline: none
+	box-sizing: border-box
 	transition: border-color 0.3s, transform 0.15s
 	position: relative
 
@@ -66,6 +67,7 @@ defineExpose({ setError });
 		z-index: 2
 		font-size: 15px
 		padding: 10px 10px
+		box-sizing: border-box
 		width: 97%
 		background: none
 		border: none

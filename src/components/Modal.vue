@@ -72,12 +72,10 @@ defineExpose({ closeModal });
 	align-items: center
 	justify-content: center
 	gap: 20px
-	width: auto
+	width: fit-content
+	max-width: 100%
 	height: auto
-	max-height: calc(100dvh - 40px)
-	max-width: calc(100dvw - 40px)
 	overflow: hidden
-	transition: max-width 0.3s ease, max-height 0.3s ease, padding 0.3s ease
 	box-sizing: border-box
 	box-shadow: 0 4px 10px var(--box-shadow)
 

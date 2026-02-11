@@ -139,6 +139,7 @@ async function closeModal() {
 		justify-content: space-between;
 		align-items: center;
 		padding: 2px 20px;
+		background-color: var(--background-root);
 		border-bottom: 1px solid var(--border-color);
 		
 		.close {

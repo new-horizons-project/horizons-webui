@@ -1,35 +1,43 @@
 <template>
 	<Modal ref="modalRef" :width=600 :height=600 measure-width="px" measure-height="px"
-	padding-set="15px" opacity-speed="0.2s">
+	padding-set="0" opacity-speed="0.2s">
 	<div class="modal-wrapper">
-		<img :src="uiStore.imageUrl + '?size=medium'" width="150" alt="">
-
-		<div class="loading-screen" v-if="loadingScreen">
-			<div class="loading-circle" v-if="!criticalError"></div>
-			<div class="loading-err" v-else-if="criticalError">
-				<img src="/icons/close.png" class="icon" width="50" height="50" alt="">
-			</div>
-			<div class="loading-text">{{ loadingText }}</div>
-			<button v-if="criticalError" style="margin-top: 30px; padding: 15px 30px;" class="button-style" @click="cancel">Close</button>
+		<div class="header">
+			<h2>Login</h2>
+			<button class="close" @click="cancel">
+				<img src="/icons/close.png" class="icon">
+			</button>
 		</div>
 
-		<div v-else class="login-form">
-			<div class="image-block">
-				<div class="text">
-					{{ currentText }}
+		<div class="main-wrapper">
+			<img :src="uiStore.imageUrl + '?size=medium'" width="150" alt="">
+
+			<div class="loading-screen" v-if="loadingScreen">
+				<div class="loading-circle" v-if="!criticalError"></div>
+				<div class="loading-err" v-else-if="criticalError">
+					<img src="/icons/close.png" class="icon" width="50" height="50" alt="">
 				</div>
+				<div class="loading-text">{{ loadingText }}</div>
+				<button v-if="criticalError" style="margin-top: 30px; padding: 15px 30px;" class="button-style" @click="cancel">Close</button>
 			</div>
 
-			<div class="input-block">
-				<InputSingle type="text" v-model="username" ref="userInputRef" :small="false" :text='t("modal.login.inputs.username")' />
-				<InputSingle type="password" v-model="password" ref="passInputRef" :small="false" :text='t("modal.login.inputs.password")' />
-				<InputSingle ref="newPass1InputRef" v-if="userMustChangePassword" type="password" v-model="newPass1" :small="false" text='New Password' />
-				<InputSingle ref="newPass2InputRef" v-if="userMustChangePassword" type="password" v-model="newPass2" :small="false" text='Retype New Password' />
-			</div>
+			<div v-else class="login-form">
+				<div class="image-block">
+					<div class="text">
+						{{ currentText }}
+					</div>
+				</div>
 
-			<div class="button-block">
-				<button class="button-style" @click="login">{{ t('modal.login.buttons.login') }}</button>
-				<button class="button-style" @click="cancel">{{ t('modal.login.buttons.cancel') }}</button>
+				<div class="input-block">
+					<InputSingle type="text" v-model="username" ref="userInputRef" :small="false" :text='t("modal.login.inputs.username")' />
+					<InputSingle type="password" v-model="password" ref="passInputRef" :small="false" :text='t("modal.login.inputs.password")' />
+					<InputSingle ref="newPass1InputRef" v-if="userMustChangePassword" type="password" v-model="newPass1" :small="false" text='New Password' />
+					<InputSingle ref="newPass2InputRef" v-if="userMustChangePassword" type="password" v-model="newPass2" :small="false" text='Retype New Password' />
+				</div>
+
+				<div class="button-block">
+					<button class="button-style" @click="login">{{ t('modal.login.buttons.login') }}</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -38,7 +46,7 @@
 
 <script lang="ts" setup>
 import Modal from './Modal.vue';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { useAuthStore } from '../storage/auth';
 import { loginUser, User, changePassword } from '../api/user';
 import { useI18n } from 'vue-i18n';
@@ -53,7 +61,7 @@ const loadingScreen = ref(false);
 const criticalError = ref(false);
 const userMustChangePassword = ref(false);
 const loadingText = ref<string>('Trying to log in...');
-const currentText = ref<string>('Login with local account');
+const currentText = ref<string>('Local Account');
 const modalRef = ref<InstanceType<typeof Modal> | null>(null);
 
 const emit = defineEmits(['close']);
@@ -122,6 +130,13 @@ const runChangePassword = async () => {
 	} catch (err: any) {
         if (err.status === 400 || err.status === 401 || err.status === 404) {
             loadingScreen.value = false;
+
+			await nextTick();
+
+			userInputRef.value?.setError(true);
+			passInputRef.value?.setError(true);
+			newPass1InputRef.value?.setError(true);
+			newPass2InputRef.value?.setError(true);
             return false;
         }
 
@@ -142,10 +157,6 @@ const login = async () => {
 		const res = await runChangePassword();
 
 		if (!res) {
-			userInputRef.value?.setError(true);
-			passInputRef.value?.setError(true);
-			newPass1InputRef.value?.setError(true);
-			newPass2InputRef.value?.setError(true);
 			return;
 		}
 	}
@@ -168,6 +179,7 @@ const login = async () => {
     } catch (err: any) {
         if (err.status === 400 || err.status === 401 || err.status === 404) {
             loadingScreen.value = false;
+			await nextTick();
 			userInputRef.value?.setError(true);
 			passInputRef.value?.setError(true);
             return;
@@ -190,8 +202,6 @@ const login = async () => {
 
 			loadingText.value = 'Unknnown error, contact administrator';
         }
-
-        loadingText.value = 'An error occurred. Try reloading page.';
         console.error(err);
     }
 };
@@ -199,15 +209,50 @@ const login = async () => {
 
 <style lang="sass" scoped>
 .modal-wrapper
-	overflow: hidden
 	flex: 1 1 auto
-	width: 100%
-	height: 100%
 	display: flex
 	flex-direction: column
-	justify-content: center
-	align-items: center
-	gap: 20px
+	height: 100%
+
+	.main-wrapper
+		padding: 15px
+		flex: 1 1 auto
+		height: 100%
+		overflow: auto
+		width: 100%
+		box-sizing: border-box
+		display: flex
+		flex-direction: column
+		justify-content: center
+		align-items: center
+		gap: 20px
+
+	.header
+		display: flex
+		justify-content: space-between
+		padding: 2px 20px
+		background-color: var(--background-root)
+		border-bottom: 1px solid var(--border-color)
+		
+		.close
+			display: flex
+			align-items: center
+			cursor: pointer
+			background: none
+			border: none
+			height: 20px
+			width: 20px
+
+			img
+				width: 20px
+				height: 20px
+				transition: transform 200ms, filter 200ms
+
+				&:hover
+					transform: rotate(90deg)
+
+				&:active
+					filter: invert(var(--icon-hover-filter))
 
 .login-form
 	width: 100%
@@ -215,7 +260,7 @@ const login = async () => {
 	flex-direction: column
 	justify-content: space-around
 	align-items: center
-	gap: 40px
+	gap: 20px
 
 .loading-screen
 	inset: 0
@@ -261,7 +306,7 @@ const login = async () => {
 	text-align: center
 
 .input-block
-	width: 85%
+	width: 100%
 	display: flex
 	flex-direction: column
 	gap: 15px
