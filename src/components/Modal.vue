@@ -88,8 +88,9 @@ defineExpose({ closeModal });
 
 @media (max-width: 800px)
 	.modal-background-block
-		width: 90% !important
-		height: 80% !important
-		max-width: 90% !important
-		max-height: 555px !important
+		min-width: 100% !important
+		width: 100% !important
+		border-left: none
+		border-right: none
+		border-radius: 0
 </style>

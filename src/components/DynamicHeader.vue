@@ -24,14 +24,54 @@
 					<img src="/icons/gear.png" alt="">
 				</router-link>
 
-				<router-link v-if="authStore.isLoggedIn" class="user" to="/my">
-					<img v-if="authStore.userAvatarUrl" :src="authStore.userAvatarUrl" alt="">
-					<div v-else class="user-avatar-alter">
-						{{ authStore.user?.username[0]?.toUpperCase() }}
-					</div>
+				<div v-if="authStore.isLoggedIn" @mouseenter="onHover" @mouseleave="onUnhover" class="user">
+					<Dropdown class="dropdown-position" :class="{ active: open }">
+						<div to="/my" class="username">
+							<img v-if="authStore.userAvatarUrl" :src="authStore.userAvatarUrl" alt="">
+							<div v-else class="user-avatar-alter">
+								{{ authStore.user?.username[0]?.toUpperCase() }}
+							</div>
 
-					{{ authStore.user?.username }}
-				</router-link>
+							{{ authStore.user?.username }}
+						</div>
+
+						<hr>
+
+						<div class="dropdown-buttons-block">
+							<router-link class="button-style" to="/my">
+								<img src="/icons/user.png" class="icon">
+								Profile
+							</router-link>
+
+							<router-link class="button-style" to="/my/privacy">
+								<img src="/icons/privacy.png" class="icon">
+								Privacy and Security
+							</router-link>
+
+							<router-link class="button-style" to="/my/settings">
+								<img src="/icons/gear.png" class="icon">
+								Settings
+							</router-link>
+						</div>
+
+						<hr>
+
+						<div class="dropdown-buttons-block alter">
+							v0.0.1
+							<hr>
+							<button class="button-style red" @click="logoutBtn()">Logout</button>
+						</div>
+					</Dropdown>
+
+					<div class="user-block">
+						<img v-if="authStore.userAvatarUrl" :src="authStore.userAvatarUrl" alt="">
+						<div v-else class="user-avatar-alter">
+							{{ authStore.user?.username[0]?.toUpperCase() }}
+						</div>
+
+						{{ authStore.user?.username }}
+					</div>
+				</div>
 				<button v-else @click="showLoginForm" class="user">
 					<img src="/icons/login.png" class="icon">
 				</button>
@@ -54,12 +94,17 @@ import { useUiStore } from '../storage/ui';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '../storage/auth';
 import Login from './Login.vue';
-
+import { useRouter } from 'vue-router';
 import { notificationController } from '../scripts/notificationController';
+import Dropdown from './Dropdown.vue';
+import { logout } from '../api/user';
 
 const authStore = useAuthStore();
 const uiStore = useUiStore();
 const route = useRoute();
+const router = useRouter();
+const open = ref(false);
+let timer: number | undefined;
 
 // Login
 watch(() => uiStore.displayLoginForm, (isOpen) => {
@@ -71,6 +116,7 @@ watch(() => uiStore.displayLoginForm, (isOpen) => {
 	document.body.style.overflow = 'initial';
 });
 
+// Forms
 function showLoginForm() {
 	uiStore.displayLoginForm = true;
 }
@@ -102,6 +148,26 @@ const links = [
 		to: '/categories'
 	}
 ]
+
+async function logoutBtn () {
+	authStore.setLogout();
+	await logout();
+	router.push("/");
+};
+
+async function onHover() {
+	if (timer) {
+		window.clearTimeout(timer);
+	}
+	
+	open.value = true;
+}
+
+function onUnhover() {
+	timer = window.setTimeout(() => {
+		open.value = false;
+	}, 120);
+}
 
 const nav = ref<HTMLElement | null>(null)
 const items = ref<HTMLElement[]>([])
@@ -177,6 +243,13 @@ onUnmounted(() => {
 		position: fixed;
 		top: 0;
 	}
+}
+
+.dropdown-position {
+	position: absolute;
+	top: calc(100% + 10px);
+	right: 0;
+	width: 250px;
 }
 
 .header {
@@ -264,28 +337,35 @@ onUnmounted(() => {
 	}
 
 	.user, .system-configuration {
-		cursor: pointer;
+		position: relative;
 		display: flex;
 		align-items: center;
+		cursor: pointer;
 		gap: 10px;
 		transition: background-color 400ms;
-
-		&:active {
-			transform: translateY(1px);
-		}
 	}
 
 	.user {
+		color: var(--color);
+		font-size: 14px;
 		padding: 6px 10px;
 		transition: color 200ms;
 
+		.user-block {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+		}
+
 		img { 
 			height: 35px;
+			width: 35px;
 			border-radius: 50%;
 		}
 
 		img.icon {
 			height: 30px;
+			width: 30px;
 			border-radius: 0px;
 			transition: filter 200ms;
 
@@ -295,11 +375,9 @@ onUnmounted(() => {
 		}
 
 		.user-avatar-alter {
-			padding: 3px 10px;
-		}
-
-		&:hover {
-			color: var(--color-dim);
+			padding: 4px 10px;
+			font-weight: 500;
+			font-size: 16px;
 		}
 	}
 

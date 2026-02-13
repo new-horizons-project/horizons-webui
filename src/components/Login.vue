@@ -2,13 +2,6 @@
 	<Modal ref="modalRef" :width=600 :height=600 measure-width="px" measure-height="px"
 	padding-set="0" opacity-speed="0.2s">
 	<div class="modal-wrapper">
-		<div class="header">
-			<h2>Login</h2>
-			<button class="close" @click="cancel">
-				<img src="/icons/close.png" class="icon">
-			</button>
-		</div>
-
 		<div class="main-wrapper">
 			<img :src="uiStore.imageUrl + '?size=medium'" width="150" alt="">
 
@@ -36,7 +29,8 @@
 				</div>
 
 				<div class="button-block">
-					<button class="button-style" @click="login">{{ t('modal.login.buttons.login') }}</button>
+					<button class="button-style" @click="cancel">{{ t('modal.login.buttons.cancel') }}</button>
+					<button class="button-style focus" @click="login">{{ t('modal.login.buttons.login') }}</button>
 				</div>
 			</div>
 		</div>
@@ -61,7 +55,7 @@ const loadingScreen = ref(false);
 const criticalError = ref(false);
 const userMustChangePassword = ref(false);
 const loadingText = ref<string>('Trying to log in...');
-const currentText = ref<string>('Local Account');
+const currentText = ref<string>('Login with Local Account');
 const modalRef = ref<InstanceType<typeof Modal> | null>(null);
 
 const emit = defineEmits(['close']);
@@ -226,36 +220,12 @@ const login = async () => {
 		justify-content: center
 		align-items: center
 		gap: 20px
-
-	.header
-		display: flex
-		justify-content: space-between
-		padding: 2px 20px
-		background-color: var(--background-root)
-		border-bottom: 1px solid var(--border-color)
-		
-		.close
-			display: flex
-			align-items: center
-			cursor: pointer
-			background: none
-			border: none
-			height: 20px
-			width: 20px
-
-			img
-				width: 20px
-				height: 20px
-				transition: transform 200ms, filter 200ms
-
-				&:hover
-					transform: rotate(90deg)
-
-				&:active
-					filter: invert(var(--icon-hover-filter))
+	
+		img:
+			filter: brightness(0.85) contrast(1.1);
 
 .login-form
-	width: 100%
+	width: 90%
 	display: flex
 	flex-direction: column
 	justify-content: space-around

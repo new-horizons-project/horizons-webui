@@ -8,13 +8,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useAuthStore } from './storage/auth';
+import { useDark, useFavicon, useTitle } from '@vueuse/core';
 import { useUiStore } from './storage/ui';
 import { reloadToken, User } from './api/user';
 import { useI18n } from 'vue-i18n';
 import { ping } from './api/app';
-
+import { useRoute } from 'vue-router';
 import DynamicHeader from './components/DynamicHeader.vue';
 import Loading from './components/Loading.vue';
 import NotificationController from './components/NotificationController.vue';
@@ -24,29 +25,20 @@ const authStore = useAuthStore();
 const uiStore = useUiStore();
 const { t } = useI18n();
 const reconnectMessageSubstr = ref<string>("");
+const appReady = ref<boolean>(false);
+const isDarkTheme = useDark();
+const faviconRef = useFavicon();
+const title = useTitle();
+const route = useRoute();
+
+// Useful functions
+const fullCurrentTitle = computed(() => {
+    return uiStore.titleExtend 
+        ? `${uiStore.titleBase} — ${uiStore.titleExtend}` 
+        : uiStore.titleBase;
+});
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-const appReady = ref<boolean>(false);
-
-async function testApi() {
-    for (let i = 0; i < 5; i++) {
-        reconnectMessageSubstr.value = t('loading.connection.messages.substring.1', { attempt: i + 1, attempts: 5 });
-
-        try {
-            const res = await ping();
-            if (res.status === 200) {
-                uiStore.apiConnecitonChecked = true;
-                return true;
-            }
-        } catch {
-            await sleep(5000);
-        }
-    }
-
-    reconnectMessageSubstr.value = t('loading.connection.messages.substring.2');
-    return false;
-}
 
 async function restoreUser() {
     try {
@@ -74,6 +66,43 @@ async function begin() {
 
 	appReady.value = true;
 }
+
+// Testing connection
+async function testApi() {
+    for (let i = 0; i < 5; i++) {
+        reconnectMessageSubstr.value = t('loading.connection.messages.substring.1', { attempt: i + 1, attempts: 5 });
+
+        try {
+            const res = await ping();
+            if (res.status === 200) {
+                uiStore.apiConnecitonChecked = true;
+                return true;
+            }
+        } catch {
+            await sleep(5000);
+        }
+    }
+
+    reconnectMessageSubstr.value = t('loading.connection.messages.substring.2');
+    return false;
+}
+
+// Watching values
+watch(isDarkTheme, async (theme) => {
+    await uiStore.initImage( 
+        theme ? "dark" : 'light'
+    );
+
+    faviconRef.value = uiStore.imageUrl + '?size=thumbnail'
+}, { immediate: true });
+
+watch(fullCurrentTitle, (newValue: string) => {
+    title.value = newValue;
+});
+
+watch(() => route.fullPath, () => {
+    uiStore.titleExtend = '';
+});
 
 onMounted(async () => {
     document.documentElement.setAttribute('data-theme', "auto");

@@ -58,6 +58,26 @@ body
 		border-color: var(--border-active-color)
 		background-color: var(--btn-background-color-active)
 
+	&.focus
+		color: white
+		background-color: var(--focus-btn-color)
+
+		&:hover
+			background-color: var(--focus-btn-color-hover) !important
+
+		&:focus, &:active
+			background-color: var(--focus-btn-color-active) !important
+
+	&.red
+		color: white
+		background-color: var(--red-btn-color) !important
+
+		&:hover
+			background-color: var(--red-btn-color-hover) !important
+
+		&:focus, &:active
+			background-color: var(--red-btn-color-active) !important
+
 .block-style
 	border-radius: 15px
 	backdrop-filter: blur(12px)

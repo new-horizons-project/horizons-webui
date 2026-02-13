@@ -45,6 +45,7 @@ import Modal from '../components/Modal.vue';
 import InputSingle from '../components/InputSingle.vue';
 import Textarea from '../components/Textarea.vue';
 import { useAuthStore } from '../storage/auth';
+import { useUiStore } from '../storage/ui';
 import { ref } from 'vue';
 
 let currentPath: Record<string, string>[];
@@ -52,8 +53,11 @@ let title = ref<string>('');
 let desc = ref<string>('');
 
 const authStore = useAuthStore();
+const uiStore = useUiStore();
 const showCreateCategory = ref(false);
 const modalRef = ref<InstanceType<typeof Modal> | null>(null);
+
+uiStore.titleExtend = "Categories";
 
 function openModal() {
 	showCreateCategory.value = true;

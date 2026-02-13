@@ -36,8 +36,6 @@
 					<div class="text">{{ authStore.user?.registrationDate.toLocaleDateString() }}</div>
 				</div>
 			</div>
-
-			<button class="button-style logout" @click="logoutBtn">Logout</button>
 		</div>
 	</div>
 </template>
@@ -45,7 +43,6 @@
 <script lang="ts" setup>
 
 import { useAuthStore } from '../storage/auth';
-import { logout } from '../api/user';
 import router from '../router';
 import { onMounted, watch } from 'vue';
 import { useUiStore } from '../storage/ui';
@@ -53,16 +50,12 @@ import { useUiStore } from '../storage/ui';
 const authStore = useAuthStore();
 const uiStore = useUiStore();
 
-async function logoutBtn () {
-	authStore.setLogout();
-	await logout();
-	router.push('/');
-};
-
 onMounted(() => {
 	if (!authStore.isLoggedIn) {
 		uiStore.displayLoginForm = true;
 	}
+
+	uiStore.titleExtend = authStore.user?.username ?? "";
 });
 
 watch(() => uiStore.displayLoginForm, (newVal, oldVal) => {
@@ -84,7 +77,7 @@ watch(() => uiStore.displayLoginForm, (newVal, oldVal) => {
 }
 
 .user-card {
-	width: 350px;
+	width: 300px;
 	padding: 24px;
 	display: flex;
 	flex-direction: column;
@@ -139,7 +132,7 @@ watch(() => uiStore.displayLoginForm, (newVal, oldVal) => {
 			background-color: var(--background-color);
 			border: 1px solid var(--border-color);
 			border-radius: 10px;
-			width: 80%;
+			width: 95%;
 
 			display: flex;
 			align-items: center;
