@@ -1,6 +1,5 @@
 <template>
-	<Modal ref="modalRef" :width=600 :height=600 measure-width="px" measure-height="px"
-	padding-set="0" opacity-speed="0.2s">
+	<Modal ref="modalRef" width="600px" height="600px" padding-set="0" opacity-speed="0.2s">
 	<div class="modal-wrapper">
 		<div class="main-wrapper">
 			<img :src="uiStore.imageUrl + '?size=medium'" width="150" alt="">
@@ -43,6 +42,7 @@ import Modal from './Modal.vue';
 import { nextTick, ref } from 'vue';
 import { useAuthStore } from '../storage/auth';
 import { loginUser, User, changePassword } from '../api/user';
+import ErrorMessage from './ErrorMessage.vue';
 import { useI18n } from 'vue-i18n';
 import { useUiStore } from '../storage/ui';
 import InputSingle from './InputSingle.vue';
@@ -64,6 +64,7 @@ const userInputRef = ref<InstanceType<typeof InputSingle> | null>(null);
 const passInputRef = ref<InstanceType<typeof InputSingle> | null>(null);
 const newPass1InputRef = ref<InstanceType<typeof InputSingle> | null>(null);
 const newPass2InputRef = ref<InstanceType<typeof InputSingle> | null>(null);
+const errorMessage = ref<InstanceType<typeof ErrorMessage> | null>(null);
 const username = ref<string>('');
 const password = ref<string>('');
 const newPass1 = ref<string>('');
@@ -288,6 +289,7 @@ const login = async () => {
 .button-block 
 	display: flex
 	gap: 10px
+	padding: 0;
 
 button
 	padding: 10px 24px

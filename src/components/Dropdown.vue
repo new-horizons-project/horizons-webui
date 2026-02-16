@@ -1,5 +1,5 @@
 <template>
-    <div class="dropdown block-style">
+    <div class="dropdown block-style" :class="{ active: open, opacity: opacity }">
         <slot></slot>
     </div>
 </template>
@@ -9,9 +9,24 @@
 import { ref } from 'vue';
 
 const open = ref(false);
+const opacity = ref(false);
 
 function changeVisibility(visible: boolean) {
-    open.value = visible;
+	if (visible) {
+		open.value = true;
+		
+		setTimeout(() => {
+			opacity.value = true;
+		}, 5);
+		
+		return;
+	}
+
+	opacity.value = false;
+
+	setTimeout(() => {
+		open.value = false;
+	}, 200);
 }
 
 defineExpose({ changeVisibility });
@@ -21,14 +36,18 @@ defineExpose({ changeVisibility });
 <style lang="scss">
 .dropdown {
 	opacity: 0;
-	display: flex;
+	display: none;
 	pointer-events: none;
 	flex-direction: column;
     width: 100%;
 	transition: opacity 200ms !important;
 
 	&.active {
+		display: flex;
 		pointer-events: initial;
+	}
+
+	&.opacity {
 		opacity: 1;
 	}
 
@@ -90,16 +109,6 @@ defineExpose({ changeVisibility });
 			cursor: pointer;
 			transition: background-color 200ms;
 		}
-	}
-
-	hr {
-		min-height: 0;
-		min-width: 0;
-		padding: 0;
-		margin: 0;
-		height: 1px;
-		border: none;
-		border-bottom: 1px solid var(--border-color);
 	}
 }
 </style>

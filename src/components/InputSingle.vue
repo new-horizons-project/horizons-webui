@@ -54,8 +54,8 @@ defineExpose({ setError });
 
 	.placeholder
 		position: absolute
-		left: 10px
-		top: 50%
+		left: 15px
+		top: 55%
 		transform: translateY(-50%)
 		user-select: none
 		color: var(--color)
@@ -66,7 +66,7 @@ defineExpose({ setError });
 	input
 		z-index: 2
 		font-size: 15px
-		padding: 10px 10px
+		padding: 10px 15px
 		box-sizing: border-box
 		width: 97%
 		background: none
@@ -80,7 +80,9 @@ defineExpose({ setError });
 			font-size: 14px
 
 		.placeholder
+			left: 10px
 			font-size: 14px
+			top: 50%
 
 		&:focus-within .placeholder, &:has(input:not(:placeholder-shown)) .placeholder
 			transform: translateY(-110%)
@@ -93,7 +95,6 @@ defineExpose({ setError });
 
 	&:focus-within
 		border-color: var(--border-active-color)
-		color: var(--color-dim)
 		
 	&:focus-within .placeholder, &:has(input:not(:placeholder-shown)) .placeholder
 		transform: translateY(-120%)

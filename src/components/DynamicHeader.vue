@@ -24,8 +24,8 @@
 					<img src="/icons/gear.png" alt="">
 				</router-link>
 
-				<div v-if="authStore.isLoggedIn" @mouseenter="onHover" @mouseleave="onUnhover" class="user">
-					<Dropdown class="dropdown-position" :class="{ active: open }">
+				<router-link v-if="authStore.isLoggedIn" @mouseenter="onHover" @mouseleave="onUnhover" to="/my" class="user">
+					<Dropdown class="dropdown-position" ref="dropdown">
 						<div to="/my" class="username">
 							<img v-if="authStore.userAvatarUrl" :src="authStore.userAvatarUrl" alt="">
 							<div v-else class="user-avatar-alter">
@@ -71,8 +71,8 @@
 
 						{{ authStore.user?.username }}
 					</div>
-				</div>
-				<button v-else @click="showLoginForm" class="user">
+				</router-link>
+				<button v-else @click="showLoginForm" class="user" style="cursor: pointer;">
 					<img src="/icons/login.png" class="icon">
 				</button>
 			</div>
@@ -102,8 +102,8 @@ import { logout } from '../api/user';
 const authStore = useAuthStore();
 const uiStore = useUiStore();
 const route = useRoute();
+const dropdown = ref();
 const router = useRouter();
-const open = ref(false);
 let timer: number | undefined;
 
 // Login
@@ -160,12 +160,12 @@ async function onHover() {
 		window.clearTimeout(timer);
 	}
 	
-	open.value = true;
+	dropdown.value.changeVisibility(true);
 }
 
 function onUnhover() {
 	timer = window.setTimeout(() => {
-		open.value = false;
+		dropdown.value.changeVisibility(false);
 	}, 120);
 }
 
@@ -340,7 +340,6 @@ onUnmounted(() => {
 		position: relative;
 		display: flex;
 		align-items: center;
-		cursor: pointer;
 		gap: 10px;
 		transition: background-color 400ms;
 	}
@@ -352,6 +351,7 @@ onUnmounted(() => {
 		transition: color 200ms;
 
 		.user-block {
+			cursor: pointer;
 			display: flex;
 			gap: 10px;
 			align-items: center;

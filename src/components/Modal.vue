@@ -3,8 +3,8 @@
         <div
             class="modal-background-block"
             :style="{
-                minWidth: width + measureWidth,
-                minHeight: height + measureHeight,
+                minWidth: width,
+                minHeight: height,
                 padding: localPadding,
             }"
         >
@@ -20,10 +20,8 @@ import { ref, onMounted } from 'vue';
 
 const props = withDefaults(
 	defineProps<{
-		measureHeight: 'px' | '%';
-		measureWidth: 'px' | '%';
-		width: number;
-		height: number;
+		width: string;
+		height: string;
 		paddingSet?: string;
 	}>(),
 	{
