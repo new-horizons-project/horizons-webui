@@ -3,8 +3,8 @@
         <div
             class="modal-background-block"
             :style="{
-                minWidth: width + measureWidth,
-                minHeight: height + measureHeight,
+                minWidth: width,
+                minHeight: height,
                 padding: localPadding,
             }"
         >
@@ -20,10 +20,8 @@ import { ref, onMounted } from 'vue';
 
 const props = withDefaults(
 	defineProps<{
-		measureHeight: 'px' | '%';
-		measureWidth: 'px' | '%';
-		width: number;
-		height: number;
+		width: string;
+		height: string;
 		paddingSet?: string;
 	}>(),
 	{
@@ -88,8 +86,9 @@ defineExpose({ closeModal });
 
 @media (max-width: 800px)
 	.modal-background-block
-		width: 90% !important
-		height: 80% !important
-		max-width: 90% !important
-		max-height: 555px !important
+		min-width: 100% !important
+		width: 100% !important
+		border-left: none
+		border-right: none
+		border-radius: 0
 </style>

@@ -17,8 +17,7 @@
 			<button class="button-style" v-if="canCreateCateg()" @click="openModal"><span style="font-size: 14px;">Add Category</span> +</button>
 		</div>
 		<router-view />
-		<Modal ref="modalRef" v-if="showCreateCategory" :width=30 :height=40 measure-width="%" measure-height="%"
-		padding-set="0" opacity-speed="0.2s">
+		<Modal ref="modalRef" v-if="showCreateCategory" width="30%" height="max-content" padding-set="0" opacity-speed="0.2s">
 			<div class="modal-wrapper">
 				<div class="header">
 					<h2>New Category</h2>
@@ -28,11 +27,34 @@
 				</div>
 				<div class="input-wrapper">
 					<div class="input">
-						<InputSingle :small="true" type="text" text="Category title" v-model="title" />
+						<InputSingle ref="catRef" :small="true" type="text" text="Category title" v-model="title" />
 					</div>
 					<div class="input">
 						<Textarea :small="true" type="text" text="Description" v-model="desc" />
 					</div>
+				</div>
+
+				<hr class="width-100">
+
+				<div class="input-wrapper flex-start">
+					<div class="select-wrapper">
+						<div class="title">Display mode</div>
+						<select v-model="select">
+							<option value="standard" selected>Standard</option>
+							<option value="wiki">Wiki</option>
+						</select>
+					</div>
+				</div>
+
+				<hr class="width-100">
+
+				<div class="err-msg" v-show="errorMessageShow">
+					<ErrorMessage ref="errMsg" />
+				</div>
+
+				<div class="button-block">
+					<button class="button-style" @click="closeModal">Cancel</button>
+					<button class="button-style focus" @click="submit">Submit</button>
 				</div>
 			</div>
 		</Modal>
@@ -44,16 +66,25 @@
 import Modal from '../components/Modal.vue';
 import InputSingle from '../components/InputSingle.vue';
 import Textarea from '../components/Textarea.vue';
+import ErrorMessage from '../components/ErrorMessage.vue';
 import { useAuthStore } from '../storage/auth';
-import { ref } from 'vue';
+import { useUiStore } from '../storage/ui';
+import { nextTick, ref } from 'vue';
 
 let currentPath: Record<string, string>[];
-let title = ref<string>('');
-let desc = ref<string>('');
 
+const title = ref<string>('');
+const desc = ref<string>('');
+const select = ref<string>('standard');
 const authStore = useAuthStore();
+const uiStore = useUiStore();
 const showCreateCategory = ref(false);
+const errorMessageShow = ref(false);
+const catRef = ref<InstanceType<typeof InputSingle> | null>(null);
+const errMsg = ref<InstanceType<typeof ErrorMessage> | null>(null);
 const modalRef = ref<InstanceType<typeof Modal> | null>(null);
+
+uiStore.titleExtend = "Categories";
 
 function openModal() {
 	showCreateCategory.value = true;
@@ -70,6 +101,17 @@ async function closeModal() {
 	setTimeout(() => {
 		showCreateCategory.value = false;
 	}, 100);
+}
+
+async function submit() {
+	if (select.value === '') {
+		catRef.value?.setError(true);
+	}
+
+	errorMessageShow.value = true;
+	nextTick();
+	errMsg.value?.changeVisibility(true)
+	errMsg.value?.setMessage("sa")
 }
 
 </script>
@@ -133,18 +175,19 @@ async function closeModal() {
 .modal-wrapper {
 	display: flex;
 	flex-direction: column;
+	box-sizing: border-box;
 
 	.header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 2px 20px;
+		padding: 2px 15px;
 		background-color: var(--background-root);
 		border-bottom: 1px solid var(--border-color);
-		
+
 		.close {
 			cursor: pointer;
-			margin-right: 0px;
+			margin-right: 5px;
 			background: none;
 			border: none;
 			height: 20px;
@@ -177,10 +220,90 @@ async function closeModal() {
 		flex-direction: column;
 		padding: 15px;
 		align-items: center;
+		box-sizing: border-box;
 		gap: 15px;
+
+		&.flex-start {
+			align-items: flex-start;
+		}
 
 		.input {
 			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.select-wrapper {
+			width: 100%;
+			display: flex;
+			position: relative;
+
+			.title {
+				width: fit-content;
+				display: flex;
+				align-items: center;
+				text-align: center;
+				font-size: 14px;
+				border: 1px solid var(--border-color);
+				border-top-left-radius: 10px;
+				border-bottom-left-radius: 10px;
+				padding: 5px 10px;
+				background-color: var(--background-color);
+			}
+
+			select {
+				cursor: pointer;
+				flex: 1 1 auto;
+				width: auto;
+				border: 1px solid var(--border-color);
+				border-left: none !important;
+				background-color: transparent;
+				appearance: none;
+				-webkit-appearance: none;
+				-moz-appearance: none;
+				border-radius: 10px;
+				border-top-left-radius: 0 !important;
+				border-bottom-left-radius: 0 !important;
+				padding: 10px;
+				color: var(--color);
+				box-sizing: border-box;
+				display: flex;
+				transition: background-color 200ms;
+
+				&:hover {
+					background-color: var(--background-color) !important;
+				}
+			}
+
+			&::after {
+				content: "⌄";
+				font-size: 20px;
+				position: absolute;
+				right: 9px;
+				top: 40%;
+				transform: translateY(-50%);
+				pointer-events: none;
+				color: var(--color);
+			}
+		}
+	}
+
+	.err-msg {
+		padding: 15px 15px 0 15px;
+	}
+
+	.button-block {
+		box-sizing: border-box;
+		display: flex;
+		padding: 15px;
+		width: 100%;
+		justify-content: center;margin-top: auto;
+		align-items: center;
+		gap: 10px;
+
+		button {
+			padding: 10px 20px;
+			cursor: pointer;
+			font-weight: 500;
 		}
 	}
 }

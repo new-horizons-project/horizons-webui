@@ -14,7 +14,13 @@ $themes: (
 		background-color: #f8f8f8,
 		user-avatar-alter: rgb(190, 190, 190),
 		blur-background: rgba(255, 255, 255, 0.3),
-
+		focus-btn-color: #4c3fd8c2,
+		focus-btn-color-hover: #6356ee,
+		focus-btn-color-active: #5a4bff,
+		red-btn-color: #bc4a4a,
+		red-btn-color-hover: #dc3f3f,
+		red-btn-color-active: #f53e3b,
+		
 		// Borders
 		border-color: rgba(0, 0, 0, 0.3),
 		border-active-color: rgba(0, 0, 0, 0.4),
@@ -42,6 +48,12 @@ $themes: (
 		background-color: #2f2f2f,
 		user-avatar-alter: rgb(71, 71, 71),
 		blur-background: rgba(0, 0, 0, 0.3),
+		focus-btn-color: #4c3fd84a,
+		focus-btn-color-hover: #4c3fd881,
+		focus-btn-color-active: #4c3fd8ce,
+		red-btn-color: #783131,
+		red-btn-color-hover: #953737,
+		red-btn-color-active: #ae3131,
 
 		// Borders
 		border-color: rgba(255, 255, 255, 0.15),

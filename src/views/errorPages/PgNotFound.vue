@@ -10,6 +10,13 @@
 	</div>
 </template>
 
+<script lang="ts" setup>
+import { useUiStore } from '../../storage/ui';
+
+const uiStore = useUiStore();
+uiStore.titleExtend = "E404";
+</script>
+
 <style lang="scss" scoped>
 
 .err-block {

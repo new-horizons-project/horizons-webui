@@ -70,7 +70,7 @@ defineExpose({ setError });
 		max-width: 100%
 		min-width: 100%
 		font-size: 15px
-		padding: 10px
+		padding: 2px 10px
 		box-sizing: border-box
 		background: none
 		border: none

@@ -1,15 +1,16 @@
 {
   "name": "horizons-webui",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.3a",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
-	"expose": "vite --host"
+    "expose": "vite --host"
   },
   "dependencies": {
+    "@vueuse/core": "^14.2.1",
     "axios": "^1.12.2",
     "pinia": "^3.0.3",
     "swagger-ui-dist": "^5.31.0",
