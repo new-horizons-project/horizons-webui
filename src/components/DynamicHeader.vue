@@ -57,7 +57,7 @@
 						<hr>
 
 						<div class="dropdown-buttons-block alter">
-							v0.0.1
+							v0.0.3a
 							<hr>
 							<button class="button-style red" @click="logoutBtn()">Logout</button>
 						</div>
