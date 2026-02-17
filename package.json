@@ -1,7 +1,7 @@
 {
   "name": "horizons-webui",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.3a",
   "type": "module",
   "scripts": {
     "dev": "vite",
