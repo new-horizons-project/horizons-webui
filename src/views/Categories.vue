@@ -16,7 +16,9 @@
 			<hr>
 			<button class="button-style" v-if="canCreateCateg()" @click="openModal"><span style="font-size: 14px;">Add Category</span> +</button>
 		</div>
+
 		<router-view />
+
 		<Modal ref="modalRef" v-if="showCreateCategory" width="30%" height="max-content" padding-set="0" opacity-speed="0.2s">
 			<div class="modal-wrapper">
 				<div class="header">
@@ -40,8 +42,8 @@
 					<div class="select-wrapper">
 						<div class="title">Display mode</div>
 						<select v-model="select">
-							<option value="standard" selected>Standard</option>
-							<option value="wiki">Wiki</option>
+							<option value="Standard" selected>Standard</option>
+							<option value="Wiki">Wiki</option>
 						</select>
 					</div>
 				</div>
@@ -70,16 +72,21 @@ import ErrorMessage from '../components/ErrorMessage.vue';
 import { useAuthStore } from '../storage/auth';
 import { useUiStore } from '../storage/ui';
 import { nextTick, ref } from 'vue';
+import { createCategory } from '../api/category';
+import { onBeforeRouteLeave } from 'vue-router';
+import { useCategoryStore } from '../storage/category';
 
 let currentPath: Record<string, string>[];
 
 const title = ref<string>('');
 const desc = ref<string>('');
-const select = ref<string>('standard');
+const select = ref<string>('Standard');
+const categoryStore = useCategoryStore();
 const authStore = useAuthStore();
 const uiStore = useUiStore();
 const showCreateCategory = ref(false);
 const errorMessageShow = ref(false);
+import { notificationController } from '../scripts/notificationController';
 const catRef = ref<InstanceType<typeof InputSingle> | null>(null);
 const errMsg = ref<InstanceType<typeof ErrorMessage> | null>(null);
 const modalRef = ref<InstanceType<typeof Modal> | null>(null);
@@ -101,18 +108,57 @@ async function closeModal() {
 	setTimeout(() => {
 		showCreateCategory.value = false;
 	}, 100);
+
+	desc.value = "";
+	title.value = "";
+	errMsg.value?.changeVisibility(false);
+	errorMessageShow.value = false;
 }
 
 async function submit() {
-	if (select.value === '') {
+	if (title.value === '') {
+		nextTick();
 		catRef.value?.setError(true);
+		return;
 	}
 
-	errorMessageShow.value = true;
-	nextTick();
-	errMsg.value?.changeVisibility(true)
-	errMsg.value?.setMessage("sa")
+	try {
+		const res = await createCategory(title.value, desc.value, select.value);
+
+		if (res.status === 200) {
+			closeModal();
+			
+			notificationController.createNotification(
+				"Info",
+				`Category "${title.value}" created successfully!`,
+				"",
+				"info"
+			);
+			return;
+        }
+	} catch (err: any) {
+        if (err.status === 401 || err.status === 403) {
+			errorMessageShow.value = true;
+
+			nextTick();
+
+			errMsg.value?.changeVisibility(true);
+			errMsg.value?.setMessage("Insufficient privileges. Unable create category");
+            return false;
+        }
+
+		if (err.status === 422 || err.status === 405 || err.status === 404) {
+			errorMessageShow.value = true;
+			nextTick();
+			errMsg.value?.changeVisibility(true);
+			errMsg.value?.setMessage(`Unexpected error ${err.status}. Contact adminstrator`);
+		}
+	}
 }
+
+onBeforeRouteLeave(() => {
+	categoryStore.unload();
+});
 
 </script>
 
@@ -121,6 +167,7 @@ async function submit() {
 	display: flex;
 	flex-direction: column;
 	width: 90%;
+	height: 100%;
 }
 
 .top {

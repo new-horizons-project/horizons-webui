@@ -14,16 +14,25 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-defineProps<{
-  substr: string;
-  message: string;
-}>();
+const props = withDefaults(
+	defineProps<{
+		substr: string;
+		message: string;
+	}>(),
+	{
+		substr: "",
+		message: ""
+	}
+);
+
 
 const showMessage = ref(false);
 
-setTimeout(() => {
-  showMessage.value = true;
-}, 5000);
+if (props.message != "") {
+	setTimeout(() => {
+		showMessage.value = true;
+	}, 5000);
+}
 </script>
 
 <style lang="sass" scoped>
@@ -37,8 +46,6 @@ setTimeout(() => {
 	align-items: center
 	position: absolute
 	z-index: 1001
-	background-color: rgba(0, 0, 0, 0.4242)
-	backdrop-filter: blur(5)
 	gap: 50px
 
 	.circle-wrapper
