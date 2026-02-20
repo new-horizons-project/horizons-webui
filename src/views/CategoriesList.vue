@@ -1,7 +1,7 @@
 <template>
 	<div class="categories-list-wrapper">
 		<div
-			v-if="categoryStore.categories.length == 0 || true"
+			v-if="categoryStore.categories.length == 0"
 			v-for="n in 3"
 			:key="n"
 			class="category block-style ghost"
@@ -136,7 +136,7 @@ onMounted(async () => {
 	}
 
 	.cover-replacer {
-		width: 45%;
+		width: 230px;
 		display: flex;
 		justify-content: center;
 		font-size: 72px;
@@ -187,7 +187,7 @@ onMounted(async () => {
 		display: flex;
 		flex-direction: column;
 		padding: 15px;
-		width: 60%;
+		width: 270px;
 
 		.name {
 			font-size: 24px;

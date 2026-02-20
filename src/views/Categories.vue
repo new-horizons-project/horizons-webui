@@ -127,6 +127,7 @@ async function submit() {
 
 		if (res.status === 200) {
 			closeModal();
+			categoryStore.load();
 			
 			notificationController.createNotification(
 				"Info",
