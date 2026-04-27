@@ -18,6 +18,8 @@ export const useAuthStore = defineStore('general', () => {
 		username.value = '';
 		isLoggedIn.value = false;
 		token.value = '';
+		user.value = undefined;
+		userAvatarUrl.value = undefined;
 	}
 
 	return {username, token, isLoggedIn, setLogin, setLogout, userAvatarUrl, user }

@@ -13,6 +13,12 @@ const refresh = axios.create({
 	withCredentials: true
 });
 
+const login = axios.create({
+	baseURL: import.meta.env.VITE_NH_API_URL,
+	timeout: 5000,
+	withCredentials: true
+});
+
 api.interceptors.request.use(
   (config) => {
     const authStore = useAuthStore();
@@ -49,4 +55,4 @@ api.interceptors.response.use(
 );
 
 
-export { api, refresh };
+export { api, refresh, login };

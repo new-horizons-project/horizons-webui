@@ -9,7 +9,7 @@ export const useUiStore = defineStore('ui', () => {
 	const imageUrl = ref<string>("");
 	const titleBase = ref<string>("");
 	const titleExtend = ref<string>("");
-	const version = ref<string>("v0.0.1");
+	const version = ref<string>("v0.0.4");
 
 	const initImage = async (theme: string) => {
 		imageUrl.value = await getImageUrl(theme);

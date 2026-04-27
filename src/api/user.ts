@@ -1,4 +1,4 @@
-import { api, refresh } from "./axios";
+import { api, login, refresh } from "./axios";
 
 export interface UserDTO {
 	id: string
@@ -47,7 +47,7 @@ export async function loginUser(username: string, password: string) {
 	params.append('username', username);
 	params.append('password', password);
 
-	const res = await api.post('/auth/login', params,
+	const res = await login.post('/auth/login', params,
 		{ 
 			headers: { 
 				'Content-Type': 'application/x-www-form-urlencoded',

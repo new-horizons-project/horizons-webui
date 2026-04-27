@@ -5,6 +5,7 @@ import User from './views/User.vue';
 import Categories from './views/Categories.vue';
 import CategoriesList from './views/CategoriesList.vue';
 import Category from './views/Category.vue';
+import CreateTopic from './views/CreateTopic.vue';
 
 const routes = [
 	{
@@ -29,6 +30,10 @@ const routes = [
 			{
 				path: ':id',
 				component: Category
+			},
+			{
+				path: ':id/new-topic',
+				component: CreateTopic
 			}
 		]
 	},

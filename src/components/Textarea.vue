@@ -67,8 +67,7 @@ defineExpose({ setError });
 	textarea
 		z-index: 2
 		width: 100%
-		max-width: 100%
-		min-width: 100%
+		resize: vertical
 		font-size: 15px
 		padding: 2px 10px
 		box-sizing: border-box

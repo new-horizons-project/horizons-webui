@@ -57,7 +57,7 @@
 						<hr>
 
 						<div class="dropdown-buttons-block alter">
-							v0.0.3a
+							{{ uiStore.version }}
 							<hr>
 							<button class="button-style red" @click="logoutBtn()">Logout</button>
 						</div>
@@ -97,7 +97,7 @@ import Login from './Login.vue';
 import { useRouter } from 'vue-router';
 import { notificationController } from '../scripts/notificationController';
 import Dropdown from './Dropdown.vue';
-import { logout } from '../api/user';
+import { logout } from '../scripts/user';
 
 const authStore = useAuthStore();
 const uiStore = useUiStore();
@@ -150,9 +150,9 @@ const links = [
 ]
 
 async function logoutBtn () {
-	authStore.setLogout();
 	await logout();
-	router.push("/");
+	await nextTick();
+	router.push("/")
 };
 
 async function onHover() {
