@@ -46,15 +46,7 @@
 					{{ category.description }}
 				</div>
 
-				<div class="link-block">
-					<hr>
-					<router-link 
-						class="button-style" 
-						:to="`/categories/${category.id}`"
-					>
-						Goto
-					</router-link>
-				</div>
+				<GotoLink :linkTo="`/categories/${category.id}`" />
 			</div>
 		</div>
 	</div>
@@ -104,6 +96,7 @@ import { createCategory } from '../api/category';
 import { onBeforeRouteLeave } from 'vue-router';
 import RouteredHeader from '../components/RouteredHeader.vue';
 import { canManageData } from '../scripts/user';
+import GotoLink from '../components/GotoLink.vue';
 
 const categoryStore = useCategoryStore();
 const uiStore = useUiStore();
@@ -335,32 +328,6 @@ onBeforeRouteLeave(() => {
 		.description {
 			flex: 1 1 auto;
 			font-size: 16px;
-		}
-
-		.link-block {
-			padding-top: 7px;
-			width: 100%;
-			display: flex;
-			gap: 10px;
-			justify-content: center;
-			align-items: center;
-
-			a {
-				padding: 1px 10px;
-				color: var(--color);
-				text-decoration: none;
-			}
-
-			hr {
-				flex: 1 1 auto;
-				min-height: 0;
-				min-width: 0;
-				padding: 0;
-				margin: 0;
-				height: 1px;
-				border: none;
-				border-bottom: 1px solid var(--border-color);
-			}
 		}
 	}
 }

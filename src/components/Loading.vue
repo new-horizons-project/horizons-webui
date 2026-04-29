@@ -40,7 +40,6 @@ if (props.message != "") {
 	width: 100%
 	height: 100%
 	display: flex
-	color: white
 	flex-direction: column
 	justify-content: center
 	align-items: center
@@ -55,8 +54,8 @@ if (props.message != "") {
 		.loading-circle
 			width: 50px
 			height: 50px
-			border: 5px solid rgba(255, 255, 255, 0.3)
-			border-top-color: white
+			border: 5px solid var(--border-loading-circle-outer)
+			border-top-color: var(--border-loading-circle)
 			border-radius: 50%
 			animation: spin 1s linear infinite
 
@@ -75,7 +74,7 @@ if (props.message != "") {
 
 		.substring
 			margin-top: 10px
-			color: rgb(94, 94, 94)
+			color: var(--color-dim)
 			font-size: 16px
 			font-weight: 400
 

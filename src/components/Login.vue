@@ -42,7 +42,7 @@ import Modal from './Modal.vue';
 import { nextTick, ref } from 'vue';
 import { useAuthStore } from '../storage/auth';
 import { loginUser, User, changePassword } from '../api/user';
-import ErrorMessage from './ErrorMessage.vue';
+// import ErrorMessage from './ErrorMessage.vue';
 import { useI18n } from 'vue-i18n';
 import { useUiStore } from '../storage/ui';
 import InputSingle from './InputSingle.vue';
@@ -75,7 +75,7 @@ const newPass1InputRef = ref<InstanceType<typeof InputSingle> | null>(null);
 const newPass2InputRef = ref<InstanceType<typeof InputSingle> | null>(null);
 
 // ref for error message content
-const errorMessage = ref<InstanceType<typeof ErrorMessage> | null>(null);
+// const errorMessage = ref<InstanceType<typeof ErrorMessage> | null>(null);
 
 // Ref for direct values of dom objects
 const username = ref<string>('');

@@ -7,6 +7,7 @@ $themes: (
 		icon-hover-filter: 0.3,
 		box-shadow: rgba(0, 0, 0, 0.025),
 		loading-color: #dbdbdb,
+		dim-gradient-color: rgba(70, 66, 66, 0.227),
 
 		// Backgrounds
 		background-root: #f6f7f9,
@@ -23,6 +24,8 @@ $themes: (
 		red-btn-color-active: #f53e3b,
 		
 		// Borders
+		border-loading-circle: rgb(169, 153, 153),
+		border-loading-circle-outer: rgba(0, 0, 0, 0.106),
 		border-color: rgba(0, 0, 0, 0.3),
 		border-active-color: rgba(0, 0, 0, 0.4),
 		border-header-slider: rgba(0, 0, 0, 0.6),
@@ -34,7 +37,9 @@ $themes: (
 
 		// Text
 		color: rgb(66, 66, 66),
-		color-dim: rgb(90, 90, 90)
+		color-dim: rgb(90, 90, 90),
+		color-dimmer: rgb(120, 120, 120),
+		color-red: rgb(240, 100, 100)
 	),
 	dark: (
 		// Specials
@@ -42,6 +47,7 @@ $themes: (
 		icon-hover-filter: 0.7,
 		box-shadow: rgba(0, 0, 0, 0.3),
 		loading-color: #3c3c3c,
+		dim-gradient-color: rgba(0, 0, 0, 0.233),
 
 		// Backgrounds
 		background-root: #1f1f1f,
@@ -58,6 +64,8 @@ $themes: (
 		red-btn-color-active: #ae3131,
 
 		// Borders
+		border-loading-circle: rgb(255, 255, 255),
+		border-loading-circle-outer: rgba(255, 255, 255, 0.23),
 		border-color: rgba(255, 255, 255, 0.15),
 		border-active-color: rgba(255, 255, 255, 0.2),
 		border-header-slider: rgba(255, 255, 255, 1),
@@ -69,7 +77,9 @@ $themes: (
 
 		// Text
 		color: rgb(250, 250, 250),
-		color-dim: rgb(180, 180, 180)
+		color-dim: rgb(180, 180, 180),
+		color-dimmer: rgb(120, 120, 120),
+		color-red: rgb(230, 72, 72)
 	)
 );
 
