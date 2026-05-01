@@ -12,7 +12,9 @@
             <span v-if="index < currentPath.length - 1"> → </span>
         </div>
         <hr>
-        <button @click="emit('click')"><span style="font-size: 14px;">{{ buttonText }}</span> +</button>
+        <button v-if="showButton" @click="emit('click')">
+			<span style="font-size: 14px;">{{ buttonText }}</span> +
+		</button>
     </div>
 </template>
 
@@ -49,13 +51,6 @@ const emit = defineEmits<{
 
 	hr {
 		flex: 1 1 auto;
-		min-height: 0;
-		min-width: 0;
-		padding: 0;
-		margin: 0;
-		height: 1px;
-		border: none;
-		border-bottom: 2px solid var(--border-color);
 	}
 
 	a {

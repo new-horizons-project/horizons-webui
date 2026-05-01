@@ -281,39 +281,6 @@ onBeforeRouteLeave(() => {
 		font-size: 12px;
 	}
 
-	.tags {
-		padding: 6px 0px 10px 0px;
-		display: flex;
-		gap: 10px;
-
-		.tag {
-			font-size: 11px;
-			padding: 0px 6px;
-			border: 1px solid transparent;
-			border-radius: 10px;
-
-			&.blue {
-				background-color: rgba(91, 91, 199, 0.358);
-				border-color: rgb(75, 75, 224);
-			}
-
-			&.green {
-				background-color: rgba(60, 180, 95, 0.32);
-				border-color: rgb(60, 180, 95);
-			}
-
-			&.orange {
-				background-color: rgba(220, 140, 40, 0.4);
-				border-color: rgb(220, 140, 40);
-			}
-
-			&.red {
-				background-color: rgba(210, 90, 90, 0.32);
-				border-color: rgb(200, 70, 70);
-			}
-		}
-	}
-
 	.info-block {
 		display: flex;
 		flex-direction: column;

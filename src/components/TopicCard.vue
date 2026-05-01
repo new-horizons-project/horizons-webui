@@ -1,12 +1,14 @@
 <template>
     <div class="block-style card-wrapper">
         <div class="img-block">
-            <img src="">
+            <img src="/placeholder.png">
             <div class="header">
                 Topic of all time
             </div>
             <div class="dim" />
         </div>
+
+        <hr>
         
         <div class="author-block standalone">
             <div class="author-fname">by John Doe</div>
@@ -124,9 +126,6 @@ import GotoLink from './GotoLink.vue';
         
         hr {
             flex: 1 1 auto;
-            height: 1px;
-            border: none;
-            border-bottom: 1px solid var(--border-color);
         }
 
         .author-fname {
