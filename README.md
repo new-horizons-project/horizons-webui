@@ -1,4 +1,4 @@
-<img width="128" height="128" alt="New Horizons Project" align="right" src="https://github.com/user-attachments/assets/20781c4e-65a1-4846-946c-c5d318b65360" />
+ <img width="150" alt="New Horizons Project" align="right" src="https://github.com/user-attachments/assets/88d4b82e-a464-4707-b165-7dfb7d80dab5" />
 
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
