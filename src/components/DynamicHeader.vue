@@ -20,7 +20,9 @@
 			</nav>
 
 			<div class="buttons-block">
-				<router-link class="system-configuration" to="/system">
+				<Search @submit="handleSearch()" />
+
+				<router-link class="system-configuration" v-if="canManageData()" to="/system/home">
 					<img src="/icons/gear.png" alt="">
 				</router-link>
 
@@ -98,6 +100,8 @@ import { useRouter } from 'vue-router';
 import { notificationController } from '../scripts/notificationController';
 import Dropdown from './Dropdown.vue';
 import { logout } from '../scripts/user';
+import Search from './Search.vue';
+import { canManageData } from '../scripts/user';
 
 const authStore = useAuthStore();
 const uiStore = useUiStore();
@@ -121,6 +125,10 @@ function showLoginForm() {
 	uiStore.displayLoginForm = true;
 }
 
+function handleSearch() {
+	router.push("/search");
+}
+
 function closeLoginForm() {
 	uiStore.displayLoginForm = false;
 
@@ -138,10 +146,6 @@ const links = [
 	{
 		label: 'Home',
 		to: '/'
-	},
-	{
-		label: 'Latest',
-		to: '/latest'
 	},
 	{
 		label: 'Categories',
@@ -253,14 +257,14 @@ onUnmounted(() => {
 }
 
 .header {
-	width: 90%;
+	width: 100%;
 	display: flex;
 	align-items: center;
 	font-size: 16px;
 	font-weight: 600;
 	gap: 25px;
 	padding: 5px;
-	margin: 10px;
+	margin: 10px 0 10px 0;
 	user-select: none;
 	transition: padding 400ms, border-radius 400ms;
 	background-color: var(--background-color-main);
@@ -333,6 +337,8 @@ onUnmounted(() => {
 		right: 5px;
 		position: absolute;
 		display: flex;
+		align-items: center;
+		width: max-content;
 		gap: 5px;
 	}
 

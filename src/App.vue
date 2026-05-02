@@ -1,7 +1,9 @@
 <template>
 	<div class="wrapper" v-if="appReady">
-		<DynamicHeader />
-		<router-view />
+        <div class="inner-wrapper">
+            <DynamicHeader />
+            <router-view />
+        </div>
 	</div>
     <Loading v-if="!uiStore.apiConnecitonChecked" :message="t('loading.connection.messages.header')" :substr="reconnectMessageSubstr"/>
     <NotificationController />
@@ -120,6 +122,21 @@ onMounted(async () => {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+    box-sizing: border-box;
+
+    .inner-wrapper {
+        width: 90%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        @media (max-width: 800px) {
+            width: calc(100% - 20px);
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
 }
 
 </style>

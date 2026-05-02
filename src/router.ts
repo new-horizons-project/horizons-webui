@@ -1,11 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from './views/Home.vue';
-import PgNotFound from './views/errorPages/PgNotFound.vue';
 import User from './views/User.vue';
 import Categories from './views/Categories.vue';
 import CategoriesList from './views/CategoriesList.vue';
 import Category from './views/Category.vue';
 import CreateTopic from './views/CreateTopic.vue';
+import { default as MainAdministrative } from './views/administrative/Main.vue';
+import { default as AdminHome } from './views/administrative/Home.vue';
+import ApplicationParameters from './views/administrative/ApplicationParameters.vue';
+import UsersManagement from './views/administrative/UsersManagement.vue';
+import TagsManagement from './views/administrative/TagsManagement.vue';
+import CategoriesManagement from './views/administrative/CategoriesManagement.vue';
+import HeadlessTopics from './views/administrative/HeadlessTopics.vue';
+import JWTManagement from './views/administrative/JWTManagement.vue';
+import ModerationLogs from './views/administrative/ModerationLogs.vue';
+import SystemAudit from './views/administrative/SystemAudit.vue';
+import Error from './views/Error.vue';
 
 const routes = [
 	{
@@ -38,10 +48,55 @@ const routes = [
 		]
 	},
 	{
+		path: '/system',
+		component: MainAdministrative,
+		children: [
+			{
+				path: 'home',
+				component: AdminHome
+			},
+			{
+				path: 'application-parameters',
+				component: ApplicationParameters
+			},
+			{
+				path: 'users-management',
+				component: UsersManagement
+			},
+			{
+				path: 'tags-management',
+				component: TagsManagement
+			},
+			{
+				path: 'categories-management',
+				component: CategoriesManagement
+			},
+			{
+				path: 'headless-topics',
+				component: HeadlessTopics
+			},
+			{
+				path: 'jwt',
+				component: JWTManagement
+			},
+			{
+				path: 'moderation-logs',
+				component: ModerationLogs
+			},
+			{
+				path: 'system-audit',
+				component: SystemAudit
+			}
+		]
+	},
+	{
+		path: '/e:id',
+		component: Error
+	},
+	{
 		path: '/:pathMatch(.*)*',
-		name: 'not-found',
-		component: PgNotFound
-  	}
+		redirect: '/e404'
+  	},
 ];
 
 const router = createRouter({

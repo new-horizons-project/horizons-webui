@@ -8,7 +8,7 @@
 .categories-wrapper {
 	display: flex;
 	flex-direction: column;
-	width: 90%;
+	width: 100%;
 	height: 100%;
 }
 </style>

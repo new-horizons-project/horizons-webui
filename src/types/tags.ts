@@ -30,7 +30,7 @@ export class Tag {
         this.baseColor = baseColor;
     }
 
-    private static generateRandomColor() {
+    private static generateRandomColor(): RGB {
         return {
             r: Math.floor(Math.random() * 256),
             g: Math.floor(Math.random() * 256),

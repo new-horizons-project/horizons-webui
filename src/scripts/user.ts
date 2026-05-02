@@ -12,3 +12,9 @@ export function canManageData() {
 	const role = authStore.user?.role
 	return role !== undefined && ["admin", "moderator"].includes(role)
 }
+
+export function canAdministerData() {
+    const authStore = useAuthStore();
+	const role = authStore.user?.role
+	return role !== undefined && ["admin"].includes(role)
+}

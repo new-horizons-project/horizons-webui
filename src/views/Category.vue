@@ -24,11 +24,11 @@
                 
                 <div class="slidered-block">
                     <div class="hred-delimiter">
-                        <div class="div">Editors</div>
-                        <hr>
-                        <div class="open-arrow" :class="{ 'opened': opened }" @click="opened = !opened">
-                            <i class="fas fa-chevron-down" />
-                        </div>
+                        <SectionHeader name-style="default" name="Editors">
+                            <div class="open-arrow" :class="{ 'opened': opened }" @click="opened = !opened">
+                                <i class="fas fa-chevron-down" />
+                            </div>
+                        </SectionHeader>
                     </div>
 
                     <transition name="expand">
@@ -67,6 +67,7 @@ import { Tag } from '../types/tags';
 import { useUiStore } from '../storage/ui';
 import { ref } from 'vue';
 import { canManageData } from '../scripts/user';
+import SectionHeader from '../components/SectionHeader.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -153,19 +154,6 @@ const opened = ref(false);
     }
 
     .hred-delimiter {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        .div {
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        hr {
-            flex: 1 1 auto;
-        }
-
         .open-arrow {
             cursor: pointer;
             font-size: 14px;

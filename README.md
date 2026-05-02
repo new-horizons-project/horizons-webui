@@ -46,12 +46,12 @@ Icons credentioals
 - <a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/login" title="login icons">Login icons created by Pixel perfect - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/settings" title="settings icons">Settings icons created by Freepik - Flaticon</a>
-- <a href="https://www.flaticon.com/ru/free-icons/-404" title="error 404 icons">Error 404 icons created by Freepik - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/home-page" title="home page icons">Home page icons created by Aldo Cervantes - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/account" title="account icons">Account icons created by SBTS2018 - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/calendar" title="calendar icons">Calendar icons created by Freepik - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/close" title="close icons">Close icons created by ariefstudio - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/privacy" title="privacy icons">Privacy icons created by Anggara - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/error-403" title="error 403 icons">Error 403 icons created by Design Circle - Flaticon</a>
 
 ### Development Team
 
