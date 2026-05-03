@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 
-import { Tag } from '../types/tags';
+import { Tag } from '../../types/tags';
 
 const props = withDefaults(defineProps<{
     tags: Tag[],

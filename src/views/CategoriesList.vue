@@ -87,7 +87,7 @@
 import { onMounted } from 'vue';
 import { useCategoryStore } from '../storage/category';
 import Modal from '../components/Modal.vue';
-import InputSingle from '../components/InputSingle.vue';
+import InputSingle from '../components/inputs/InputSingle.vue';
 import Textarea from '../components/Textarea.vue';
 import ErrorMessage from '../components/ErrorMessage.vue';
 import { useUiStore } from '../storage/ui';

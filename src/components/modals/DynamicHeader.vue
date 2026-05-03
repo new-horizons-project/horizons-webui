@@ -50,9 +50,9 @@
 								Privacy and Security
 							</router-link>
 
-							<router-link class="button-style" to="/my/settings">
+							<router-link class="button-style" to="/my/password-reset">
 								<img src="/icons/gear.png" class="icon">
-								Settings
+								Password Reset
 							</router-link>
 						</div>
 
@@ -92,16 +92,16 @@ import {
 	computed,
 	watch 
 } from 'vue';
-import { useUiStore } from '../storage/ui';
+import { useUiStore } from '../../storage/ui';
 import { useRoute } from 'vue-router';
-import { useAuthStore } from '../storage/auth';
+import { useAuthStore } from '../../storage/auth';
 import Login from './Login.vue';
 import { useRouter } from 'vue-router';
-import { notificationController } from '../scripts/notificationController';
+import { notificationController } from '../../scripts/notificationController';
 import Dropdown from './Dropdown.vue';
-import { logout } from '../scripts/user';
+import { logout } from '../../scripts/user';
 import Search from './Search.vue';
-import { canManageData } from '../scripts/user';
+import { canManageData } from '../../scripts/user';
 
 const authStore = useAuthStore();
 const uiStore = useUiStore();

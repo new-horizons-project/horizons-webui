@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 
-import type { PathItem } from '../types/path';
+import type { PathItem } from '../../types/path';
 
 const props = defineProps<{
 	showButton: boolean,

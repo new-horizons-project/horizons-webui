@@ -40,11 +40,11 @@
 <script lang="ts" setup>
 import Modal from './Modal.vue';
 import { nextTick, ref } from 'vue';
-import { useAuthStore } from '../storage/auth';
-import { loginUser, User, changePassword } from '../api/user';
+import { useAuthStore } from '../../storage/auth';
+import { loginUser, User, changePassword } from '../../api/user';
 // import ErrorMessage from './ErrorMessage.vue';
 import { useI18n } from 'vue-i18n';
-import { useUiStore } from '../storage/ui';
+import { useUiStore } from '../../storage/ui';
 import InputSingle from './InputSingle.vue';
 
 const authStore = useAuthStore();
