@@ -27,7 +27,7 @@
 				</router-link>
 
 				<router-link v-if="authStore.isLoggedIn" @mouseenter="onHover" @mouseleave="onUnhover" to="/my" class="user">
-					<Dropdown class="dropdown-position" ref="dropdown">
+					<Popup class="popup-position" ref="popup">
 						<div to="/my" class="username">
 							<img v-if="authStore.userAvatarUrl" :src="authStore.userAvatarUrl" alt="">
 							<div v-else class="user-avatar-alter">
@@ -39,7 +39,7 @@
 
 						<hr>
 
-						<div class="dropdown-buttons-block">
+						<div class="popup-buttons-block">
 							<router-link class="button-style" to="/my">
 								<img src="/icons/user.png" class="icon">
 								Profile
@@ -58,12 +58,12 @@
 
 						<hr>
 
-						<div class="dropdown-buttons-block alter">
+						<div class="popup-buttons-block alter">
 							{{ uiStore.version }}
 							<hr>
 							<button class="button-style red" @click="logoutBtn()">Logout</button>
 						</div>
-					</Dropdown>
+					</popup>
 
 					<div class="user-block">
 						<img v-if="authStore.userAvatarUrl" :src="authStore.userAvatarUrl" alt="">
@@ -98,7 +98,7 @@ import { useAuthStore } from '../../storage/auth';
 import Login from './Login.vue';
 import { useRouter } from 'vue-router';
 import { notificationController } from '../../scripts/notificationController';
-import Dropdown from '../uiElements/Dropdown.vue';
+import Popup from '../uiElements/Popup.vue';
 import { logout } from '../../scripts/user';
 import Search from '../inputs/Search.vue';
 import { canManageData } from '../../scripts/user';
@@ -106,7 +106,7 @@ import { canManageData } from '../../scripts/user';
 const authStore = useAuthStore();
 const uiStore = useUiStore();
 const route = useRoute();
-const dropdown = ref();
+const popup = ref();
 const router = useRouter();
 let timer: number | undefined;
 
@@ -164,12 +164,12 @@ async function onHover() {
 		window.clearTimeout(timer);
 	}
 	
-	dropdown.value.changeVisibility(true);
+	popup.value.changeVisibility(true);
 }
 
 function onUnhover() {
 	timer = window.setTimeout(() => {
-		dropdown.value.changeVisibility(false);
+		popup.value.changeVisibility(false);
 	}, 120);
 }
 
@@ -249,7 +249,7 @@ onUnmounted(() => {
 	}
 }
 
-.dropdown-position {
+.popup-position {
 	position: absolute;
 	top: calc(100% + 10px);
 	right: 0;

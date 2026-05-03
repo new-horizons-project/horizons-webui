@@ -35,13 +35,6 @@
 			<div class="info-block">
 				<div class="name">{{ category.name }}</div>
 
-				<!-- <div class="block-name">
-					Latest topics tags
-				</div>
-
-				<div class="tags">
-				</div> -->
-
 				<div class="description">
 					{{ category.description }}
 				</div>

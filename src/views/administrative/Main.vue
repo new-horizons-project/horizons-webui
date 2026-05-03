@@ -69,7 +69,7 @@ const systemLinks: PathItemWithIcon[] = [
     {
         to: "/system/system-audit",
         label: "System Audit",
-        iconUrl: "/icons/audit.png"
+        iconUrl: "/icons/logs.png"
     }
 ];
 
@@ -82,12 +82,12 @@ const administrationLinks: PathItemWithIcon[] = [
     {
         to: "/system/categories-management",
         label: "Category Management",
-        iconUrl: "/icons/category.png"
+        iconUrl: "/icons/management.png"
     },
     {
         to: "/system/jwt",
         label: "JWT Management",
-        iconUrl: "/icons/sessions.png"
+        iconUrl: "/icons/privacy.png"
     }
 ];
 
@@ -98,9 +98,9 @@ const moderationLinks: PathItemWithIcon[] = [
         iconUrl: "/icons/logs.png"
     },
     {
-        to: "/system/headless-topics",
-        label: "Headless Topics",
-        iconUrl: "/icons/headless.png"
+        to: "/system/empty-topics",
+        label: "Empty Topics",
+        iconUrl: "/icons/empty.png"
     },
     {
         to: "/system/tags-management",
@@ -193,6 +193,7 @@ onMounted(() => {
 
 .page-wrapper {
     width: 85%;
+    padding: 15px;
 }
 
 </style>

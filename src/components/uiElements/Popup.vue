@@ -1,5 +1,5 @@
 <template>
-    <div class="dropdown block-style" :class="{ active: open, opacity: opacity }">
+    <div class="popup block-style" :class="{ active: open, opacity: opacity }">
         <slot></slot>
     </div>
 </template>
@@ -34,7 +34,7 @@ defineExpose({ changeVisibility });
 </script>
 
 <style lang="scss">
-.dropdown {
+.popup {
 	opacity: 0;
 	display: none;
 	pointer-events: none;
@@ -59,7 +59,7 @@ defineExpose({ changeVisibility });
 		gap: 10px;
 	}
 	
-	.dropdown-buttons-block {
+	.popup-buttons-block {
 		padding: 10px;
 		display: flex;
 		gap: 10px;
@@ -90,6 +90,9 @@ defineExpose({ changeVisibility });
 			img {
 				width: 20px !important;
 				height: 20px !important;
+				padding-right: 1px;
+				padding-bottom: 1px;
+				transform: translateY(1px);
 
 				&:hover {
 					filter: var(--icon-filter);

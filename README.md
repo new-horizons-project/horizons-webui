@@ -52,6 +52,11 @@ Icons credentioals
 - <a href="https://www.flaticon.com/free-icons/close" title="close icons">Close icons created by ariefstudio - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/privacy" title="privacy icons">Privacy icons created by Anggara - Flaticon</a>
 - <a href="https://www.flaticon.com/free-icons/error-403" title="error 403 icons">Error 403 icons created by Design Circle - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/adjust" title="adjust icons">Adjust icons created by Creatype - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/criteria" title="criteria icons">Criteria icons created by kusumapotter - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/history" title="history icons">History icons created by Arkinasi - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/category" title="category icons">Category icons created by The Icon Tree - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/empty-set" title="empty set icons">Empty set icons created by Freepik - Flaticon</a>
 
 ### Development Team
 
