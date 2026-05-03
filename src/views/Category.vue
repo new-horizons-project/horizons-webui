@@ -59,15 +59,15 @@
 <script setup lang="ts">
 
 import type { PathItem } from '../types/path';
-import RouteredHeader from '../components/RouteredHeader.vue';
-import TopicCard from '../components/TopicCard.vue';
+import RouteredHeader from '../components/uiElements/RouteredHeader.vue';
+import TopicCard from '../components/topic/TopicCard.vue';
 import { useRoute, useRouter } from 'vue-router';
-import Tags from '../components/Tags.vue';
+import Tags from '../components/uiElements/Tags.vue';
 import { Tag } from '../types/tags';
 import { useUiStore } from '../storage/ui';
 import { ref } from 'vue';
 import { canManageData } from '../scripts/user';
-import SectionHeader from '../components/SectionHeader.vue';
+import SectionHeader from '../components/uiElements/SectionHeader.vue';
 
 const route = useRoute();
 const router = useRouter();

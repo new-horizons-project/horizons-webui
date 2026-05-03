@@ -18,8 +18,8 @@ import { reloadToken, User } from './api/user';
 import { useI18n } from 'vue-i18n';
 import { ping } from './api/app';
 import { useRoute } from 'vue-router';
-import DynamicHeader from './components/DynamicHeader.vue';
-import Loading from './components/Loading.vue';
+import DynamicHeader from './components/modals/DynamicHeader.vue';
+import Loading from './components/uiElements/Loading.vue';
 import NotificationController from './components/NotificationController.vue';
 // import { notificationController } from './scripts/notificationController';
 

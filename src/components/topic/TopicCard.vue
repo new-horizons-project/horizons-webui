@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-import GotoLink from './GotoLink.vue';
+import GotoLink from '../uiElements/GotoLink.vue';
 </script>
 
 <style lang="scss" scoped>

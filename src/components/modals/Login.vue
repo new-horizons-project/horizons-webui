@@ -45,7 +45,7 @@ import { loginUser, User, changePassword } from '../../api/user';
 // import ErrorMessage from './ErrorMessage.vue';
 import { useI18n } from 'vue-i18n';
 import { useUiStore } from '../../storage/ui';
-import InputSingle from './InputSingle.vue';
+import InputSingle from '../inputs/InputSingle.vue';
 
 const authStore = useAuthStore();
 const uiStore = useUiStore();

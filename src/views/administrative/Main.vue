@@ -48,7 +48,7 @@
 import { onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import type { PathItemWithIcon } from '../../types/path';
-import SectionHeader from '../../components/SectionHeader.vue';
+import SectionHeader from '../../components/uiElements/SectionHeader.vue';
 import { canManageData } from '../../scripts/user';
 import { canAdministerData } from '../../scripts/user';
 

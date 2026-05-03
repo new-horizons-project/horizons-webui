@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import Notification from './Notification.vue';
+import Notification from './uiElements/Notification.vue';
 import { notificationController } from '../scripts/notificationController';
 
 const notifications = computed(() => notificationController.all);

@@ -98,9 +98,9 @@ import { useAuthStore } from '../../storage/auth';
 import Login from './Login.vue';
 import { useRouter } from 'vue-router';
 import { notificationController } from '../../scripts/notificationController';
-import Dropdown from './Dropdown.vue';
+import Dropdown from '../uiElements/Dropdown.vue';
 import { logout } from '../../scripts/user';
-import Search from './Search.vue';
+import Search from '../inputs/Search.vue';
 import { canManageData } from '../../scripts/user';
 
 const authStore = useAuthStore();

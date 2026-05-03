@@ -86,17 +86,17 @@
 
 import { onMounted } from 'vue';
 import { useCategoryStore } from '../storage/category';
-import Modal from '../components/Modal.vue';
+import Modal from '../components/modals/Modal.vue';
 import InputSingle from '../components/inputs/InputSingle.vue';
-import Textarea from '../components/Textarea.vue';
-import ErrorMessage from '../components/ErrorMessage.vue';
+import Textarea from '../components/inputs/Textarea.vue';
+import ErrorMessage from '../components/uiElements/ErrorMessage.vue';
 import { useUiStore } from '../storage/ui';
 import { nextTick, ref } from 'vue';
 import { createCategory } from '../api/category';
 import { onBeforeRouteLeave } from 'vue-router';
-import RouteredHeader from '../components/RouteredHeader.vue';
+import RouteredHeader from '../components/uiElements/RouteredHeader.vue';
 import { canManageData } from '../scripts/user';
-import GotoLink from '../components/GotoLink.vue';
+import GotoLink from '../components/uiElements/GotoLink.vue';
 
 const categoryStore = useCategoryStore();
 const uiStore = useUiStore();
